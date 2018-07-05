@@ -45,6 +45,7 @@ MuonBackGenerator.cxx
 CosmicsGenerator.cxx
 MuDISGenerator.cxx
 FixedTargetGenerator.cxx
+PGGenerator.cxx
 )
 
 set(LINKDEF GenLinkDef.h)

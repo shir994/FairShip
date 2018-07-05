@@ -122,11 +122,16 @@ Int_t TargetTracker::InitMedium(const char* name)
     return geoBuild->createMedium(ShipMedium);
 }
 
-void TargetTracker::SetTargetTrackerParam(Double_t TTX, Double_t TTY, Double_t TTZ)
+void TargetTracker::SetTargetTrackerParam(Double_t TTX, Double_t TTY, Double_t TTZ,
+                                          Double_t composite_z_, Double_t sci_fi_z_,
+                                          Double_t support_z_)
 {
     TTrackerX = TTX;
     TTrackerY = TTY;
     TTrackerZ = TTZ;
+    composite_z = composite_z_;
+    sci_fi_z = sci_fi_z_;
+    support_z = support_z_;
 }
 
 void TargetTracker::SetBrickParam(Double_t CellW)
@@ -150,28 +155,53 @@ void TargetTracker::SetDesign(Int_t Design)
 }
 
 
-void TargetTracker::ConstructGeometry()
+TGeoVolume* TargetTracker::DefineVolume(const std::string& name, Double_t x_half_size,
+                                        Double_t y_half_size, Double_t z_half_size,
+                                        const std::string& medium_name,
+                                        int colour, size_t transparency_level)
 {
 
-  InitMedium("TTmedium");
-  TGeoMedium *medium =gGeoManager->GetMedium("TTmedium");
+    InitMedium(medium_name.c_str());
+    TGeoMedium *medium = gGeoManager->GetMedium(medium_name.c_str());
+    TGeoBBox* geo_box = new TGeoBBox((name + "_box").c_str(), x_half_size, y_half_size, z_half_size);
+    TGeoVolume* geo_volume = new TGeoVolume(name.c_str(), geo_box, medium);
+    geo_volume->SetLineColor(colour);
+    geo_volume->SetTransparency(transparency_level);
+
+    return geo_volume;
+}
+
+
+void TargetTracker::ConstructGeometry()
+{
   TGeoVolume *volTarget=gGeoManager->GetVolume("volTarget");
 
-  TGeoBBox *TTBox = new TGeoBBox("TTBox",TTrackerX/2, TTrackerY/2, TTrackerZ/2);
-    TGeoVolume *volTT = new TGeoVolume("TargetTracker",TTBox,medium);
-    volTT->SetLineColor(kBlue - 1);
-    AddSensitiveVolume(volTT);
+  auto vol_box = DefineVolume("TT_box", TTrackerX / 2, TTrackerY / 2, TTrackerZ / 2,
+                              "vacuum", kBlue - 1, 1);
+  auto vol_composite = DefineVolume("TT_composite", TTrackerX / 2, TTrackerY / 2, composite_z / 2,
+                                    "Composite", kGray - 1);
+  auto vol_scifi = DefineVolume("TT_SciFi", TTrackerX / 2, TTrackerY / 2, sci_fi_z / 2,
+                                "SciFi", kGreen);
+  AddSensitiveVolume(vol_scifi);
+  auto vol_support = DefineVolume("TT_support", TTrackerX / 2, TTrackerY / 2, support_z / 2,
+                                  "Airex", kYellow);
 
-    Double_t d_tt = -ZDimension/2 + TTrackerZ/2;
-    Double_t zpos = 0;
-    Int_t n = 0;
-    
-    for(int l = 0; l < fNTT; l++)
-      {
-	volTarget->AddNode(volTT,n,new TGeoTranslation(0,0, d_tt + l*(TTrackerZ +CellWidth)));
-	zpos = d_tt+l*(TTrackerZ +CellWidth);
-	n++;
-      }
+
+  vol_box->AddNode(vol_composite, 0, new TGeoTranslation(0, 0,
+                   - TTrackerZ / 2 + composite_z / 2));
+  vol_box->AddNode(vol_scifi, 0, new TGeoTranslation(0, 0, 
+                   - TTrackerZ / 2 + composite_z + sci_fi_z / 2));
+  vol_box->AddNode(vol_support, 0, new TGeoTranslation(0, 0,
+                   - TTrackerZ / 2 + composite_z + sci_fi_z + support_z / 2));
+  vol_box->AddNode(vol_composite, 1, new TGeoTranslation(0, 0,
+                   - TTrackerZ / 2 + composite_z + sci_fi_z + support_z + composite_z / 2));
+
+  Double_t first_tt_position = -ZDimension / 2 + TTrackerZ / 2;
+  for (int l = 0; l < fNTT; ++l)
+  {
+    volTarget->AddNode(vol_box, l,
+                       new TGeoTranslation(0, 0, first_tt_position + l * (TTrackerZ + CellWidth)));
+  }
 }
 
 Bool_t TargetTracker::ProcessHits(FairVolume* vol)
@@ -195,23 +225,23 @@ Bool_t TargetTracker::ProcessHits(FairVolume* vol)
         fTrackID  = gMC->GetStack()->GetCurrentTrackNumber();
         //Int_t fTrackID  = gMC->GetStack()->GetCurrentTrackNumber();
         gMC->CurrentVolID(fVolumeID);
-	//gGeoManager->PrintOverlaps();
-	
-	//cout<< "detID = " << detID << endl;
-	Int_t MaxLevel = gGeoManager->GetLevel();
-	const Int_t MaxL = MaxLevel;
-       	//cout << gMC->CurrentVolPath()<< endl;
-	
+  //gGeoManager->PrintOverlaps();
+  
+  //cout<< "detID = " << detID << endl;
+  Int_t MaxLevel = gGeoManager->GetLevel();
+  const Int_t MaxL = MaxLevel;
+        //cout << gMC->CurrentVolPath()<< endl;
+  
 
-	const char *name;
-	
-	Double_t zEnd = 0, zStart =0;
+  const char *name;
+  
+  Double_t zEnd = 0, zStart =0;
 
-	
-	if (fELoss == 0. ) { return kFALSE; }
+  
+  if (fELoss == 0. ) { return kFALSE; }
         TParticle* p=gMC->GetStack()->GetCurrentTrack();
-	Int_t fMotherID =p->GetFirstMother();
-	Int_t pdgCode = p->GetPdgCode();
+  Int_t fMotherID =p->GetFirstMother();
+  Int_t pdgCode = p->GetPdgCode();
 
         TLorentzVector Pos; 
         gMC->TrackPosition(Pos); 
@@ -220,10 +250,10 @@ Bool_t TargetTracker::ProcessHits(FairVolume* vol)
         Double_t zmean = (fPos.Z()+Pos.Z())/2. ;     
         
 
-	AddHit(fTrackID,fVolumeID, TVector3(xmean, ymean,  zmean),
+  AddHit(fTrackID,fVolumeID, TVector3(xmean, ymean,  zmean),
                TVector3(fMom.Px(), fMom.Py(), fMom.Pz()), fTime, fLength,
                fELoss, pdgCode);
-	
+  
         // Increment number of muon det points in TParticle
         ShipStack* stack = (ShipStack*) gMC->GetStack();
         stack->AddPoint(ktauTT);
@@ -273,13 +303,13 @@ void TargetTracker::Reset()
 TTPoint* TargetTracker::AddHit(Int_t trackID,Int_t detID,
                            TVector3 pos, TVector3 mom,
                            Double_t time, Double_t length,
-			    Double_t eLoss, Int_t pdgCode)
+          Double_t eLoss, Int_t pdgCode)
 {
     TClonesArray& clref = *fTTPointCollection;
     Int_t size = clref.GetEntriesFast();
     //cout << "brick hit called"<< pos.z()<<endl;
     return new(clref[size]) TTPoint(trackID,detID, pos, mom,
-					time, length, eLoss, pdgCode);
+          time, length, eLoss, pdgCode);
 }
 
 ClassImp(TargetTracker)

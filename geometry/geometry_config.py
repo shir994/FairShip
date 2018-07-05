@@ -653,16 +653,17 @@ with ConfigRegistry.register_config("basic") as c:
         c.NuTauTarget.col=9
         c.NuTauTarget.wall=20
     if c.NuTauTarget.Design == 3: #One unique magnet, eventually more than one target volume 
-        c.NuTauTarget.row=7
-        c.NuTauTarget.col=7
-        c.NuTauTarget.wall=19
-        #c.NuTauTarget.wall=10
+        c.NuTauTarget.n_films = 50
+        c.NuTauTarget.row=1
+        c.NuTauTarget.col=1
+        #c.NuTauTarget.wall=19
+        c.NuTauTarget.wall=6
         c.NuTauTarget.target=1 #number of neutrino target volumes
 
         
     c.NuTauTarget.nuTargetPassive = nuTargetPassive
 
-    c.NuTauTarget.Ydist = 0.2*u.cm
+    c.NuTauTarget.Ydist = 0.0*u.cm
     
     c.NuTauTarget.SingleEmFilm = True
     c.NuTauTarget.EmTh = 0.0070 * u.cm
@@ -680,15 +681,19 @@ with ConfigRegistry.register_config("basic") as c:
     c.NuTauTarget.BrPackZ = 0.1 * u.cm
     c.NuTauTarget.BrPackX = c.NuTauTarget.BrX - c.NuTauTarget.EmX
     c.NuTauTarget.BrPackY = c.NuTauTarget.BrY - c.NuTauTarget.EmY
-    c.NuTauTarget.BrZ = 56 * c.NuTauTarget.AllPW + c.NuTauTarget.EPlW +c.NuTauTarget.BrPackZ
+    c.NuTauTarget.BrZ = c.NuTauTarget.n_films * c.NuTauTarget.AllPW + c.NuTauTarget.EPlW +c.NuTauTarget.BrPackZ
 
  #TargetTrackers!
     c.NuTauTT = AttrDict(z=0*u.cm)
     c.NuTauTT.design = nuTauTargetDesign
     c.NuTauTT.TTX = c.NuTauTarget.xdim
     c.NuTauTT.TTY = c.NuTauTarget.ydim
-    c.NuTauTT.TTZ= 6.0*u.cm
     c.NuTauTT.n = c.NuTauTarget.wall+1
+
+    c.NuTauTT.composite_z = 0.02 * u.cm
+    c.NuTauTT.sci_fi_z = 0.145 * 2 * u.cm
+    c.NuTauTT.support_z = 2 * u.cm
+    c.NuTauTT.TTZ = 2 * c.NuTauTT.composite_z + c.NuTauTT.sci_fi_z + c.NuTauTT.support_z;
 
  #HPT!
     c.tauHPT = AttrDict(z=0*u.cm)

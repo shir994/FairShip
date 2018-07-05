@@ -522,30 +522,68 @@ Bool_t GenieGenerator::ReadEvent(FairPrimaryGenerator* cpg)
     Double_t y;
     Double_t z;
     Int_t count=0;
-    while (prob2int<gRandom->Uniform(0.,1.)) {
-      //place x,y,z uniform along path
-      z=gRandom->Uniform(start[2],end[2]);
-      x=txnu*(z-ztarget);
-      y=tynu*(z-ztarget);
-      if (mparam[6]<0.5){
-        //mparam is number of boundaries along path. mparam[6]=0.: uniform material budget along path, use present x,y,z
-        prob2int=2.;
-      }else{
-        //get local material at this point, to calculate probability that interaction is at this point.
-        TGeoNode *node = gGeoManager->FindNode(x,y,z);
-        TGeoMaterial *mat = 0;
-        if (node && !gGeoManager->IsOutside()) {
-          mat = node->GetVolume()->GetMaterial();
-         //cout << "Info GenieGenerator: mat " <<  count << ", " << mat->GetName() << ", " << mat->GetDensity() << endl;
-         //density relative to Prob largest density along this trajectory, i.e. use rho(Pt)
-         prob2int= mat->GetDensity()/mparam[7];
-         if (prob2int>1.) cout << "***WARNING*** GenieGenerator: prob2int > Maximum density????" << prob2int << " maxrho:" << mparam[7] << " material: " <<  mat->GetName() << endl;
-         count+=1;
-        }else{
-          prob2int=0.;
-        }
-     }
+
+    auto navigator = gGeoManager->GetCurrentNavigator();
+    navigator->cd("cave/tTauNuDet_1/NudetMagnet_1/volMagRegion_1/volTarget_1/Wall_0/"
+                                                             "Row_0/Cell_0/Brick_1");
+    TGeoNode* node = navigator->GetCurrentNode();
+
+//    TObjArray* nodes = node->GetVolume()->GetNodes();
+//    for (Int_t i = 0; i < nodes->GetSize(); i++) {
+//        node = (TGeoNode*)nodes->At(i);
+//        std::cout << node->GetName() << std::endl;
+//    }
+
+    Double_t local_coords[3]={0, 0, 0};
+    Double_t global_coords[3]= {0, 0, 0};
+
+    navigator->LocalToMaster(local_coords, global_coords);
+
+    std::cout << "COORDS" << std::endl;
+    for (auto el : global_coords) {
+        std::cout << el << std::endl;
     }
+
+    auto emulsion = static_cast<TGeoBBox*> (gGeoManager->GetVolume("Emulsion")->GetShape());
+    auto brick = static_cast<TGeoBBox*> (gGeoManager->GetVolume("Brick")->GetShape());
+ 
+    std::cout << emulsion->GetDX() << std::endl;
+    std::cout << emulsion->GetDY() << std::endl;
+    std::cout << brick->GetDZ() << std::endl;
+
+    // Generate uniformly in FIRST HALF of the brick
+    int x_safe_margin = 1;
+    int y_safe_margin = 1;
+
+    z = gRandom->Uniform(global_coords[2] - brick->GetDZ(), global_coords[2] + brick->GetDZ());
+    x = gRandom->Uniform(- emulsion->GetDX() + x_safe_margin,
+         emulsion->GetDX() - x_safe_margin);
+    y = gRandom->Uniform(- emulsion->GetDY() + y_safe_margin,
+         emulsion->GetDY() - y_safe_margin);
+    // while (prob2int<gRandom->Uniform(0.,1.)) {
+    //   //place x,y,z uniform along path
+    //   z=gRandom->Uniform(start[2],end[2]);
+    //   x=txnu*(z-ztarget);
+    //   y=tynu*(z-ztarget);
+    //   if (mparam[6]<0.5){
+    //     //mparam is number of boundaries along path. mparam[6]=0.: uniform material budget along path, use present x,y,z
+    //     prob2int=2.;
+    //   }else{
+    //     //get local material at this point, to calculate probability that interaction is at this point.
+    //     TGeoNode *node = gGeoManager->FindNode(x,y,z);
+    //     TGeoMaterial *mat = 0;
+    //     if (node && !gGeoManager->IsOutside()) {
+    //       mat = node->GetVolume()->GetMaterial();
+    //      //cout << "Info GenieGenerator: mat " <<  count << ", " << mat->GetName() << ", " << mat->GetDensity() << endl;
+    //      //density relative to Prob largest density along this trajectory, i.e. use rho(Pt)
+    //      prob2int= mat->GetDensity()/mparam[7];
+    //      if (prob2int>1.) cout << "***WARNING*** GenieGenerator: prob2int > Maximum density????" << prob2int << " maxrho:" << mparam[7] << " material: " <<  mat->GetName() << endl;
+    //      count+=1;
+    //     }else{
+    //       prob2int=0.;
+    //     }
+    //  }
+    // }
     //cout << "Info GenieGenerator: prob2int " << prob2int << ", " << count << endl;
 
     Double_t zrelative=z-ztarget;
