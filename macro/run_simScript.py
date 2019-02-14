@@ -8,7 +8,7 @@ import shipRoot_conf
 import rootUtils as ut
 from ShipGeoConfig import ConfigRegistry
 
-debug = 0  # 1 print weights and field
+debug = 1  # 1 print weights and field
            # 2 make overlap check
 dryrun = False # True: just setup Pythia and exit
 
@@ -356,9 +356,9 @@ if simEngine == "PG":
   myPgun.SetPRange(Estart,Eend)
   myPgun.SetPhiRange(0, 360) # // Azimuth angle range [degree]
   myPgun.SetBoxXYZ(-1.*u.cm, -1.*u.cm, -3256.6700*u.cm,
-                   1.*u.cm, 1.*u.cm, -3252.0675*u.cm)
-  #myPgun.SetBoxXYZ(-1.*u.cm, -1.*u.cm, -10*u.cm,
-  #                 1.*u.cm, 1.*u.cm, 10*u.cm)
+                   1.*u.cm, 1.*u.cm, -3252.8565*u.cm)
+  #myPgun.SetBoxXYZ(-0.*u.cm, -0.*u.cm, -3256.5700*u.cm,
+  #                 0.*u.cm, 0.*u.cm, -3256.5695*u.cm)
   if charm!=0:
      myPgun.SetThetaRange(0,6) # // Pdefault for muon flux
      primGen.SetTarget(ship_geo.target.z0,0.)

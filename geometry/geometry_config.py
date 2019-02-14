@@ -3,7 +3,7 @@ import ROOT as r
 from ShipGeoConfig import AttrDict, ConfigRegistry
 # the following params should be passed through 'ConfigRegistry.loadpy' method
 # muShieldDesign = 5  # 1=passive 2=active 5=TP design 6=magnetized hadron absorber
-# nuTargetPassive = 1  #0 = with active layers, 1 = only passive
+# nuTargetPassive = 0  #0 = with active layers, 1 = only passive
 # nuTauTargetDesign  =   #0 = TP, 1 = NEW with magnet, 2 = NEW without magnet, 3 = 2018 design
 
 # targetOpt      = 5  # 0=solid   >0 sliced, 5: 5 pieces of tungsten, 4 air slits, 17: molybdenum tungsten interleaved with H20
@@ -653,11 +653,10 @@ with ConfigRegistry.register_config("basic") as c:
         c.NuTauTarget.col=9
         c.NuTauTarget.wall=20
     if c.NuTauTarget.Design == 3: #One unique magnet, eventually more than one target volume 
-        c.NuTauTarget.n_films = 50
-        c.NuTauTarget.row=1
-        c.NuTauTarget.col=1
-        #c.NuTauTarget.wall=19
-        c.NuTauTarget.wall=6
+        c.NuTauTarget.n_films = 56#28#56#168#45
+        c.NuTauTarget.row=7#1
+        c.NuTauTarget.col=7#1
+        c.NuTauTarget.wall=19#6
         c.NuTauTarget.target=1 #number of neutrino target volumes
 
         
