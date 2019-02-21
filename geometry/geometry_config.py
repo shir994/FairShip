@@ -479,7 +479,7 @@ with ConfigRegistry.register_config("basic") as c:
     if nuTauTargetDesign!=2:
         c.EmuMagnet = AttrDict(z=0*u.cm)
         c.EmuMagnet.Design = nuTauTargetDesign
-        c.EmuMagnet.B=1.5*u.tesla
+        c.EmuMagnet.B=0*u.tesla
         c.EmuMagnet.GapDown = 25*u.cm
         if c.EmuMagnet.Design==3:
             scale=1.
@@ -653,10 +653,10 @@ with ConfigRegistry.register_config("basic") as c:
         c.NuTauTarget.col=9
         c.NuTauTarget.wall=20
     if c.NuTauTarget.Design == 3: #One unique magnet, eventually more than one target volume 
-        c.NuTauTarget.n_films = 56#28#56#168#45
-        c.NuTauTarget.row=7#1
-        c.NuTauTarget.col=7#1
-        c.NuTauTarget.wall=19#6
+        c.NuTauTarget.n_films = 168 #56#28#56#168#45
+        c.NuTauTarget.row=1
+        c.NuTauTarget.col=1
+        c.NuTauTarget.wall=1
         c.NuTauTarget.target=1 #number of neutrino target volumes
 
         
