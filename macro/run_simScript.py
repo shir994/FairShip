@@ -581,19 +581,19 @@ if inactivateMuonProcesses :
 # -----Start run----------------------------------------------------
 run.Run(nEvents)
 # -----Runtime database---------------------------------------------
-kParameterMerged = ROOT.kTRUE
-parOut = ROOT.FairParRootFileIo(kParameterMerged)
-parOut.open(parFile)
-rtdb.setOutput(parOut)
-rtdb.saveOutput()
-rtdb.printParamContexts()
-getattr(rtdb,"print")()
+#kParameterMerged = ROOT.kTRUE
+#parOut = ROOT.FairParRootFileIo(kParameterMerged)
+#parOut.open(parFile)
+#rtdb.setOutput(parOut)
+#rtdb.saveOutput()
+#rtdb.printParamContexts()
+#getattr(rtdb,"print")()
 # ------------------------------------------------------------------------
 run.CreateGeometryFile("%s/geofile_full.%s.root" % (outputDir, tag))
 # save ShipGeo dictionary in geofile
 import saveBasicParameters
 saveBasicParameters.execute("%s/geofile_full.%s.root" % (outputDir, tag),ship_geo)
-
+print("0")
 # checking for overlaps
 if checking4overlaps:
  fGeo = ROOT.gGeoManager
@@ -605,8 +605,11 @@ if checking4overlaps:
    x.CheckOverlaps(0.0001)
    fGeo.PrintOverlaps()
 # -----Finish-------------------------------------------------------
+print("1")
 timer.Stop()
+print("2")
 rtime = timer.RealTime()
+print("3")
 ctime = timer.CpuTime()
 print ' ' 
 print "Macro finished succesfully." 
@@ -617,7 +620,7 @@ if "P8gen" in globals() :
 		print "total number of dark photons (including multiple meson decays per single collision) ",P8gen.nrOfDP()
 
 print "Output file is ",  outFile 
-print "Parameter file is ",parFile
+#print "Parameter file is ",parFile
 print "Real time ",rtime, " s, CPU time ",ctime,"s"
 
 # remove empty events

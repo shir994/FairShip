@@ -1538,6 +1538,14 @@ void veto::ConstructGeometry()
       top->AddNode(tDet2, 1, new TGeoTranslation(0, 0,zStartDet2));
      }
 
+// Adding new veto after shield
+     InitMedium("lead");
+     TGeoMedium* lead = gGeoManager->GetMedium("lead");
+     
+     TGeoVolume* after_shield = gGeoManager->MakeBox("shield_plane", lead, 1*m, 1*m, 0.4*m);
+     after_shield->SetLineColor(kRed);
+     top->AddNode(after_shield, 0, new TGeoTranslation(0, 0, -3430));
+     AddSensitiveVolume(after_shield);
 // only for fastMuon simulation, otherwise output becomes too big
      if (fFastMuon && fFollowMuon){
         const char* Vol  = "TGeoVolume";
