@@ -30,7 +30,7 @@
 #include "TGeoCone.h"
 #include "TGeoMaterial.h"
 #include "TParticle.h"
-
+#include "TGeoUniformMagField.h"
 
 
 #include <iostream>
@@ -1538,6 +1538,31 @@ void veto::ConstructGeometry()
       top->AddNode(tDet2, 1, new TGeoTranslation(0, 0,zStartDet2));
      }
 
+//--------------------------------------------------------------------------------------------
+     int OFFSET = -15000;
+     InitMedium("vacuum");
+     TGeoMedium* vacuum = gGeoManager->GetMedium("vacuum");
+     TGeoVolume* magnet = gGeoManager->MakeBox("magnet", vacuum,
+                                               magnet_shape[0] / 2 * m,
+                                               magnet_shape[1] / 2 * m,
+                                               magnet_shape[2] / 2 * m);
+     magnet->SetLineColor(kGreen);
+     top->AddNode(magnet, 0, new TGeoTranslation(0, 0, OFFSET + magnet_shape[2] / 2 * m));
+     TGeoUniformMagField* mag_field = new TGeoUniformMagField(magnet_field[0], 
+                                                              magnet_field[1],
+                                                              magnet_field[2]);
+     magnet->SetField(mag_field);
+     AddSensitiveVolume(magnet);
+
+     TGeoVolume* sensitive = gGeoManager->MakeBox("det", vacuum, 50*m, 50*m, 0.01*cm);
+     sensitive->SetLineColor(kRed);
+     //top->AddNode(sensitive, 0, new TGeoTranslation(0, 0, OFFSET + magnet_shape[2] * m + 10*m));
+     top->AddNode(sensitive, 0, new TGeoTranslation(0, 0, OFFSET + 20*m));
+     //for (int index = 0, step = -10000; step < -4000; step += 1000, index += 1) {
+     //   top->AddNode(sensitive, index, new TGeoTranslation(0, 0, step));
+     //}
+     AddSensitiveVolume(sensitive);
+//----------------------------------------------------------------------------------------  ------
 // only for fastMuon simulation, otherwise output becomes too big
      if (fFastMuon && fFollowMuon){
         const char* Vol  = "TGeoVolume";

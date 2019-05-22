@@ -62,6 +62,13 @@ class veto: public FairDetector
       f_VetoThickness=b;f_OuterSupportThickness=c;supportMedIn_name=d;f_LidThickness=l;vetoMed_name=e;supportMedOut_name=f;decayVolumeMed_name=v;
      f_RibThickness=r;ribMed_name=rm;}
 
+    void SetMagnetShape(Float_t x, Float_t y, Float_t z) {
+        magnet_shape = {x, y, z};
+    }
+    void SetMagnetField(Float_t x, Float_t y, Float_t z) {
+        magnet_field = {x, y, z};
+    }
+
     /**      This method is an example of how to add your own point
      *       of type vetoPoint to the clones array
     */
@@ -150,6 +157,10 @@ class veto: public FairDetector
     TGeoMedium *ribVolumeMed; //! 
     TGeoMedium *ribMed; //!
     TGeoMedium *phi_ribMed; //!
+
+
+    std::array<Float_t, 3> magnet_shape;
+    std::array<Float_t, 3> magnet_field;
 
     Float_t fXstart,fYstart; // horizontal/vertical width at start of tank
     Float_t zFocusX,zFocusY; // focus points for conical design
