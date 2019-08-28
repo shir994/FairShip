@@ -379,12 +379,12 @@ if simEngine == "PG":
      myPgun.SetThetaRange(0,6) # // Pdefault for muon flux
      primGen.SetTarget(ship_geo.target.z0,0.)
   else:  
-     myPgun.SetThetaRange(0,25) # // Polar angle in lab system range [degree]
+     myPgun.SetThetaRange(0,10) # // Polar angle in lab system range [degree]
   primGen.AddGenerator(myPgun)
 # -----muon DIS Background------------------------
 if simEngine == "muonDIS":
  ut.checkFileExists(inputFile)
- primGen.SetTarget(0., 0.) 
+ primGen.SetTarget(0., 0.)
  DISgen = ROOT.MuDISGenerator()
  # from nu_tau detector to tracking station 2
  # mu_start, mu_end =  ship_geo.tauMudet.zMudetC,ship_geo.TrackStation2.z

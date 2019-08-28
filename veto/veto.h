@@ -63,11 +63,18 @@ class veto: public FairDetector
      f_RibThickness=r;ribMed_name=rm;}
 
     void SetMagnetShape(Float_t x, Float_t y, Float_t z) {
+        magnet_shape.resize(3);
         magnet_shape = {x, y, z};
     }
     void SetMagnetField(Float_t x, Float_t y, Float_t z) {
         magnet_field = {x, y, z};
     }
+
+    void SetTrapezMagnetShape(Float_t x_begin, Float_t x_end, Float_t y_begin, Float_t y_end, Float_t z) {
+        magnet_shape.resize(5);
+        magnet_shape = {x_begin, x_end, y_begin, y_end, z};
+    }
+
 
     /**      This method is an example of how to add your own point
      *       of type vetoPoint to the clones array
@@ -159,7 +166,7 @@ class veto: public FairDetector
     TGeoMedium *phi_ribMed; //!
 
 
-    std::array<Float_t, 3> magnet_shape;
+    std::vector<Float_t> magnet_shape;
     std::array<Float_t, 3> magnet_field;
 
     Float_t fXstart,fYstart; // horizontal/vertical width at start of tank

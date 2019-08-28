@@ -1541,11 +1541,19 @@ void veto::ConstructGeometry()
 //--------------------------------------------------------------------------------------------
      int OFFSET = -15000;
      InitMedium("vacuum");
+     InitMedium("steel");
      TGeoMedium* vacuum = gGeoManager->GetMedium("vacuum");
-     TGeoVolume* magnet = gGeoManager->MakeBox("magnet", vacuum,
-                                               magnet_shape[0] / 2 * m,
-                                               magnet_shape[1] / 2 * m,
-                                               magnet_shape[2] / 2 * m);
+     TGeoMedium* steel = gGeoManager->GetMedium("steel");
+
+
+     // MakeTrd2 (const char *name, TGeoMedium *medium, Double_t dx1, Double_t dx2, Double_t dy1, Double_t dy2, Double_t dz)
+     TGeoVolume* magnet = gGeoManager->MakeTrd2("magnet", steel,
+                                                magnet_shape[0] / 2 * m,
+                                                magnet_shape[1] / 2 * m,
+                                                magnet_shape[2] / 2 * m,
+                                                magnet_shape[3] / 2 * m,
+                                                magnet_shape[4] / 2 * m);
+
      magnet->SetLineColor(kGreen);
      top->AddNode(magnet, 0, new TGeoTranslation(0, 0, OFFSET + magnet_shape[2] / 2 * m));
      TGeoUniformMagField* mag_field = new TGeoUniformMagField(magnet_field[0], 

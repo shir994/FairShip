@@ -40,18 +40,23 @@ def process_file(DATA_DIR, input_file):
                 # Middle or inital stats??
                 pos_begin = ROOT.TVector3()
                 hit.Position(pos_begin)
-                muon_veto_points.append([pos_begin.X(), pos_begin.Y(), pos_begin.Z()])
-        if len(muon_veto_points) != 1:
+                mom = ROOT.TVector3()
+                hit.Momentum(mom)
+                muon_veto_points.append([pos_begin.X(), pos_begin.Y(),
+                                         pos_begin.Z(), mom.Mag()])
+        if len(muon_veto_points) > 1:
             continue
-        else:
-            muons.extend(muon)
-            veto_points.extend(muon_veto_points)
+        elif len(muon_veto_points) == 0:
+            muon_veto_points = [[0, 0, 0, 0]]
+        muons.extend(muon)
+        veto_points.extend(muon_veto_points)
 
     np.save(os.path.join(DATA_DIR, "muons_mom"), np.array(muons))
     np.save(os.path.join(DATA_DIR, "veto_points"), np.array(veto_points))
 
 if __name__ == "__main__":
     for folder in os.listdir(sys.argv[1]):
-        if "." not in folder:
+        if "scripts" not in folder:
             filename = [file for file in os.listdir(os.path.join(sys.argv[1], folder)) if "ship.conical.PG" in file][0]
-            process_file(folder, filename)
+            print(folder, filename)
+            process_file(os.path.join(sys.argv[1],folder), filename)

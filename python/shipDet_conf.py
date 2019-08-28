@@ -193,7 +193,10 @@ def configure(run,ship_geo):
  dirname = os.path.dirname(__file__)
  with open (os.path.join(dirname, "../diff-model/magnet_params.json")) as f:
     params = json.load(f)
- Veto.SetMagnetShape(params['shape']['X'], params['shape']['Y'], params['shape']['Z'])
+ #Veto.SetMagnetShape(params['shape']['X'], params['shape']['Y'], params['shape']['Z'])
+ Veto.SetTrapezMagnetShape(params['shape']['X_begin'], params['shape']['X_end'],
+                           params['shape']['Y_begin'], params['shape']['Y_end'],
+                           params['shape']['Z']);
  Veto.SetMagnetField(params['field']['X'], params['field']['Y'], params['field']['Z'])
 
  detectorList.append(Veto)
