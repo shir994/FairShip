@@ -22,7 +22,8 @@ def process_file(DATA_DIR, input_file):
     veto_points = []
 
     for index, event in enumerate(tree):
-        
+        if index % 50000 == 0:
+            print(index)
         muon = []
         for hit in event.MCTrack:
             if abs(hit.GetPdgCode()) == MUON and hit.GetMotherId() == -1:
@@ -32,6 +33,7 @@ def process_file(DATA_DIR, input_file):
                     hit.GetPz(),
                     hit.GetPdgCode()
                 ])
+                break
 
         muon_veto_points = []
         for hit in event.vetoPoint:
@@ -56,7 +58,7 @@ def process_file(DATA_DIR, input_file):
 
 if __name__ == "__main__":
     for folder in os.listdir(sys.argv[1]):
-        if "scripts" not in folder:
+        if "Untitled.ipynb" not in folder:
             filename = [file for file in os.listdir(os.path.join(sys.argv[1], folder)) if "ship.conical.PG" in file][0]
             print(folder, filename)
             process_file(os.path.join(sys.argv[1],folder), filename)
