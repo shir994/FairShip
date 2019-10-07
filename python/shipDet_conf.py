@@ -410,8 +410,8 @@ def configure(run,ship_geo):
   run.SetField(fMagField)
 #
  #exclusionList = []
- exclusionList = ["MagVolume", "DecayVolume", "Muon","Ecal","Hcal","Strawtubes","TargetTrackers","NuTauTarget","HighPrecisionTrackers",\
-                  "Magnet","MuonShield","TargetStation","NuTauMudet","EmuMagnet", "TimeDet"]
+ exclusionList = ["MagVolume", "DecayVolume", "Muon","Ecal","Hcal","Strawtubes","TargetTrackers","HighPrecisionTrackers",\
+                  "Magnet","MuonShield","TargetStation", "TimeDet"]
  for x in detectorList:
    if x.GetName() in exclusionList: continue
    run.AddModule(x)

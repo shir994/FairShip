@@ -1562,14 +1562,14 @@ void veto::ConstructGeometry()
      magnet->SetField(mag_field);
      AddSensitiveVolume(magnet);
 
-     TGeoVolume* sensitive = gGeoManager->MakeBox("det", vacuum, 50*m, 50*m, 0.01*cm);
-     sensitive->SetLineColor(kRed);
+     //TGeoVolume* sensitive = gGeoManager->MakeBox("det", vacuum, 50*m, 50*m, 0.01*cm);
+     //sensitive->SetLineColor(kRed);
      //top->AddNode(sensitive, 0, new TGeoTranslation(0, 0, OFFSET + magnet_shape[2] * m + 10*m));
-     top->AddNode(sensitive, 0, new TGeoTranslation(0, 0, OFFSET + 20*m));
+     //top->AddNode(sensitive, 0, new TGeoTranslation(0, 0, OFFSET + 20*m));
      //for (int index = 0, step = -10000; step < -4000; step += 1000, index += 1) {
      //   top->AddNode(sensitive, index, new TGeoTranslation(0, 0, step));
      //}
-     AddSensitiveVolume(sensitive);
+     //AddSensitiveVolume(sensitive);
 //----------------------------------------------------------------------------------------  ------
 // only for fastMuon simulation, otherwise output becomes too big
      if (fFastMuon && fFollowMuon){

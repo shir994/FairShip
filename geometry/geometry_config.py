@@ -17,10 +17,11 @@ if "muShieldGeo" not in globals():
     muShieldGeo = None
 if "nuTargetPassive" not in globals():
     nuTargetPassive = 1
-if "nuTauTargetDesign" not in globals():
-    nuTauTargetDesign = 0
-    if muShieldDesign >= 7: 
-        nuTauTargetDesign=1
+# if "nuTauTargetDesign" not in globals():
+#     nuTauTargetDesign = 0
+#     if muShieldDesign >= 7: 
+#         nuTauTargetDesign=1
+nuTauTargetDesign=3
 if "targetOpt" not in globals():
     targetOpt = 18
 if "strawDesign" not in globals():
@@ -609,7 +610,7 @@ with ConfigRegistry.register_config("basic") as c:
         c.tauMudet.ZRpc = 2.*u.cm
         c.tauMudet.Ztot = c.tauMudet.NRpc*c.tauMudet.ZRpc+c.tauMudet.NFe*c.tauMudet.ZFe
         #c.tauMudet.zMudetC = -c.decayVolume.length/2. - c.tauMudet.Ztot/2
-        c.tauMudet.zMudetC = c.Chamber1.z -c.chambers.Tub1length-10*u.cm - c.tauMudet.Ztot/2
+        c.tauMudet.zMudetC = -15000 + 20*u.m#c.Chamber1.z -c.chambers.Tub1length-10*u.cm - c.tauMudet.Ztot/2
         c.tauMudet.PillarX = 40*u.cm
         c.tauMudet.PillarZ = 50*u.cm
         c.tauMudet.PillarY = 10*u.m - c.cave.floorHeightMuonShield - c.tauMudet.Ytot/2 + c.tauMudet.deltay/2  - 0.1*u.mm
