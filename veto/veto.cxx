@@ -1205,17 +1205,17 @@ void veto::ConstructGeometry()
       floor->SetLineColor(11);
       tDecayVol->AddNode(floor, 0, new TGeoTranslation(0, -10*m+floorHeightA/2.,Length/2.));
       //entrance lid
-      TGeoVolume* T1Lid = MakeLidSegments(1,dx1,dy);
-      tDecayVol->AddNode(T1Lid, 1, new TGeoTranslation(0, 0, zpos - zStartDecayVol+f_LidThickness/2.1));
+      // TGeoVolume* T1Lid = MakeLidSegments(1,dx1,dy);
+      // tDecayVol->AddNode(T1Lid, 1, new TGeoTranslation(0, 0, zpos - zStartDecayVol+f_LidThickness/2.1));
 
-      //without segment1, recalculate the z and (half)length of segment 2:
-      //Take into account to remove the between seg1 and seg2 due to straw-veto station.
-      //and add this gap to the total length.
-      Double_t tgap=fTub2z-fTub1z-fTub2length-fTub1length;
-      fTub2z=fTub1z+fTub2length+tgap/2.;
-      fTub2length=fTub2length+fTub1length+tgap/2.;
-      TGeoVolume* seg2 = MakeSegments(fTub2length,dx1,dy,slopex,slopey,floorHeightA);
-      tDecayVol->AddNode(seg2, 1, new TGeoTranslation(0, 0, fTub2z-zStartDecayVol));
+      // //without segment1, recalculate the z and (half)length of segment 2:
+      // //Take into account to remove the between seg1 and seg2 due to straw-veto station.
+      // //and add this gap to the total length.
+      // Double_t tgap=fTub2z-fTub1z-fTub2length-fTub1length;
+      // fTub2z=fTub1z+fTub2length+tgap/2.;
+      // fTub2length=fTub2length+fTub1length+tgap/2.;
+      // TGeoVolume* seg2 = MakeSegments(fTub2length,dx1,dy,slopex,slopey,floorHeightA);
+      // tDecayVol->AddNode(seg2, 1, new TGeoTranslation(0, 0, fTub2z-zStartDecayVol));
 //////////////?????
       Length = fTub6length+fTub2length+3*m; // extend under ecal and muon detectors
       box = new TGeoBBox("box2",  10 * m, floorHeightB/2., Length/2.);
@@ -1228,25 +1228,32 @@ void veto::ConstructGeometry()
       
       
    // make the exit window
-      Double_t dx2 = slopex*(fTub6z +fTub6length - zFocusX);
-      TGeoVolume *T6Lid = gGeoManager->MakeBox("T6Lid",supportMedOut,dx2,dy,f_LidThickness/2.);
-      T6Lid->SetLineColor(18);
-      T6Lid->SetLineColor(2);
-      T6Lid->SetFillColor(2);
-      tMaGVol->AddNode(T6Lid, 1, new TGeoTranslation(0, 0,fTub6z+fTub6length+f_LidThickness/2.+0.1*cm - zStartMagVol));
-      //finisMakeSegments assembly and position
-      top->AddNode(tDecayVol, 1, new TGeoTranslation(0, 0,zStartDecayVol));
-      top->AddNode(tMaGVol, 1, new TGeoTranslation(0, 0,zStartMagVol));
+      // Double_t dx2 = slopex*(fTub6z +fTub6length - zFocusX);
+      // TGeoVolume *T6Lid = gGeoManager->MakeBox("T6Lid",supportMedOut,dx2,dy,f_LidThickness/2.);
+      // T6Lid->SetLineColor(18);
+      // T6Lid->SetLineColor(2);
+      // T6Lid->SetFillColor(2);
+      // tMaGVol->AddNode(T6Lid, 1, new TGeoTranslation(0, 0,fTub6z+fTub6length+f_LidThickness/2.+0.1*cm - zStartMagVol));
+      // //finisMakeSegments assembly and position
+      // top->AddNode(tDecayVol, 1, new TGeoTranslation(0, 0,zStartDecayVol));
+      // top->AddNode(tMaGVol, 1, new TGeoTranslation(0, 0,zStartMagVol));
 
 
 // Adding new veto after shield
      InitMedium("vacuum");
      TGeoMedium* dummy = gGeoManager->GetMedium("vacuum");
 
-     TGeoVolume* after_shield = gGeoManager->MakeBox("sensitive_plane", dummy, 5*m, 5*m, 0.05*mm);
+
+     TGeoVolume* after_shield = gGeoManager->MakeBox("sensitive_plane", Sens, 5*m, 5*m, 0.05*mm);
      after_shield->SetLineColor(kRed);
      top->AddNode(after_shield, 0, new TGeoTranslation(0, 0, -3469));
      AddSensitiveVolume(after_shield);
+// Add sensitive plane in place of tracker
+     TGeoVolume *sentsitive_tracker = gGeoManager->MakeBox("sentsitive_tracker", Sens, 1000., 900., 1.);
+     sentsitive_tracker->SetLineColor(kMagenta-10);
+     top->AddNode(sentsitive_tracker, 1, new TGeoTranslation(0, +100, fT1z));
+     AddSensitiveVolume(sentsitive_tracker);
+
 
 // only for fastMuon simulation, otherwise output becomes too big
      if (fFastMuon && fFollowMuon){
