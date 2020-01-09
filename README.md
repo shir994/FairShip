@@ -10,73 +10,51 @@ All packages are managed in Git and GitHub. Please read [the Git tutorial for
 SHiP](https://github.com/ShipSoft/FairShip/wiki/Git-Tutorial-for-SHiP) first,
 even if you already know Git, as it explains how development is done on GitHub.
 
-## Prerequisites
+## Build Instructions using CVMFS
 
-All needed pre-requisites are provided by the FairSoft package, see below.
-
-Additionally for developers:
-  * clang-format (to format code according to our style guide)
-  * clang-tidy (to check coding conventions -- mostly naming rules which are not covered by `cpplint`)
-
-## Build Instructions, following [the tutorial given at the Nov'17 collab meeting](https://indico.cern.ch/event/663423/contributions/2760156/attachments/1555373/2445724/Ship-Soft-CollaborationMeetingNov2017.pdf)
-0. For a full installation go to step 3. If you work on lxplus, or on SLC6/CC7
-   and have access to `/cvmfs/ship.cern.ch`, and you only want to install FairShip, define enviroment variables:
-    ```bash
-    export SHIPBUILD=/cvmfs/ship.cern.ch/SHiPBuild
-    ```    
-
-1. Install FairShip
+1. Download the FairShip software
     ```bash
     git clone https://github.com/ShipSoft/FairShip.git
-    cd FairShip
-    ./localBuild.sh
-    ```    
-2. Setup environment
-    ```bash
-    source FairShipRun/config.sh
-    ```    
+    ```
 
-3. For a full installation on any linux system:
+2. Make sure you can access the SHiP CVMFS Repository
     ```bash
-    mkdir SHiPBuild; cd SHiPBuild
-    git clone https://github.com/ShipSoft/FairShip.git 
-    FairShip/aliBuild.sh
-    ```    
+    ls /cvmfs/ship.cern.ch
+    ```
+3. Source the setUp script
+    ```bash
+    source /cvmfs/ship.cern.ch/SHiP-2018/latest/setUp.sh
+    ```
 
-4. Setup environment
+4. Build the software using aliBuild
     ```bash
-    alibuild/alienv enter (--shellrc) FairShip/latest
-    ```    
-    
-## Docker Instructions
-1. Build an docker image from a Dockerfile:
+    aliBuild build FairShip --default fairship-2018 --always-prefer-system --config-dir $SHIPDIST
+    ```
+
+If you exit your shell session and you want to go back working on it, make sure to re-execute the third step.
+
+To load the FairShip environment, after you build the software you can simply use:
+
+5. Load the environment
     ```bash
-    git clone https://github.com/ShipSoft/FairShip.git
-    cd FairShip
-    docker build -t fairship .
-    ``` 
-2. Run the FairShip docker image:
-    ```bash
-    docker run -i -t --rm fairship /bin/bash
-    ``` 
-3. Advanced docker run options:
-    ```bash
-    docker run -i -t --rm \
-    -e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
-    -v /local_workdir:/image_workdir \
-    fairship /bin/bash
-    ``` 
-    Line ```-e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix``` forwards graphics from the image to your local system         (similar to ssh -X). Line ```-v /local_workdir:/image_workdir``` shares ```/local_workdir``` directory on the local system with ```/image_workdir``` directory on the docker image system.
+    alienv enter FairShip/latest
+    ```
+
+However, this won't work if you are using HTCondor. In such case you can do:
+
+```bash
+eval alienv load FairShip/latest
+```
 
 ## Run Instructions
 
-Partial installation, step 1 of above :
+Set up the bulk of the environment from CVMFS.
 
 ```bash
-source FairShipRun/config.sh
-```    
+source /cvmfs/ship.cern.ch/SHiP-2018/latest/setUp.sh
+```
 
-If you have a full installation, step 3 of above:
+Load your local FairShip environment.
 
 ```bash
 alibuild/alienv enter (--shellrc) FairShip/latest
@@ -103,6 +81,32 @@ python -i $FAIRSHIP/macro/eventDisplay.py -f ship.conical.Pythia8-TGeant4_rec.ro
 // use SHiP Event Display GUI
 Use quit() or Ctrl-D (i.e. EOF) to exit
 ```
+
+## Docker Instructions
+
+Docker is **not** the recommended way to run `FairShip` locally. It is ideal
+for reproducing reproducible, stateless environments for debugging, HTCondor
+and cluster use, or when a strict separation between `FairShip` and the host is
+desirable.
+
+1. Build an docker image from the provided `Dockerfile`:
+    ```bash
+    git clone https://github.com/ShipSoft/FairShip.git
+    cd FairShip
+    docker build -t fairship .
+    ``` 
+2. Run the `FairShip` docker image:
+    ```bash
+    docker run -i -t --rm fairship /bin/bash
+    ``` 
+3. Advanced docker run options:
+    ```bash
+    docker run -i -t --rm \
+    -e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -v /local_workdir:/image_workdir \
+    fairship /bin/bash
+    ``` 
+    The option `-e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix` forwards graphics from the docker to your local system (similar to `ssh -X`). The option `-v /local_workdir:/image_workdir` mounts `/local_workdir` on the local system as `/image_workdir` within docker.
 
 ## Contributing Code
 
