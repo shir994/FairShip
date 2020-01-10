@@ -1240,13 +1240,13 @@ void veto::ConstructGeometry()
 
 
 // Adding new veto after shield
-     InitMedium("vacuum");
-     TGeoMedium* dummy = gGeoManager->GetMedium("vacuum");
+//     InitMedium("vacuum");
+//     TGeoMedium* dummy = gGeoManager->GetMedium("vacuum");
 
-     TGeoVolume* after_shield = gGeoManager->MakeBox("sensitive_plane", dummy, 5*m, 5*m, 0.05*mm);
-     after_shield->SetLineColor(kRed);
-     top->AddNode(after_shield, 0, new TGeoTranslation(0, 0, -3469));
-     AddSensitiveVolume(after_shield);
+//     TGeoVolume* after_shield = gGeoManager->MakeBox("sensitive_plane", dummy, 5*m, 5*m, 0.05*mm);
+//     after_shield->SetLineColor(kRed);
+//     top->AddNode(after_shield, 0, new TGeoTranslation(0, 0, -3469));
+//     AddSensitiveVolume(after_shield);
 
 // only for fastMuon simulation, otherwise output becomes too big
      if (fFastMuon && fFollowMuon){
