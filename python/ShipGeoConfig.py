@@ -6,6 +6,7 @@ import pickle
 from contextlib import contextmanager
 from future.utils import with_metaclass
 
+
 def expand_env(string):
     """
     Expand environment variables in string:
