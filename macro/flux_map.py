@@ -196,13 +196,13 @@ def main():
             kinematics = extract_kinematics(event, hit)
             if not kinematics:
                 continue
-            if hit.GetDetectorID() == 0:
+            if hit.GetDetectorID() // 1000 == 1:
                 h['TargetTracker_all'].Fill(kinematics['x'], kinematics['y'], kinematics['weight'])
             h['TargetTracker_xvsz_all'].Fill(kinematics['z'], kinematics['x'], kinematics['weight'])
             h['TargetTracker_yvsz_all'].Fill(kinematics['z'], kinematics['y'], kinematics['weight'])
             if abs(kinematics["pid"]) == 13:
                 fill_muon_histograms(h, muon_ids, kinematics)
-                if hit.GetDetectorID() == 0:
+                if hit.GetDetectorID() // 1000 == 1:
                     h['TargetTracker_mu'].Fill(kinematics['x'], kinematics['y'], kinematics['weight'])
                 h['TargetTracker_xvsz_mu'].Fill(kinematics['z'], kinematics['x'], kinematics['weight'])
                 h['TargetTracker_yvsz_mu'].Fill(kinematics['z'], kinematics['y'], kinematics['weight'])
