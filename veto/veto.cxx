@@ -1223,7 +1223,7 @@ void veto::ConstructGeometry()
       floor->SetLineColor(11);
       tMaGVol->AddNode(floor, 0, new TGeoTranslation(0, -10*m+floorHeightB/2., Length/2.-2*fTub3length - 0.5*m));
 
-      TGeoVolume*  magnetInnerWalls = MakeMagnetSegment(3);
+      //TGeoVolume*  magnetInnerWalls = MakeMagnetSegment(3);
       //tMaGVol->AddNode(magnetInnerWalls, 1, new TGeoTranslation(0, 0, fTub4z - zStartMagVol));      
       
       
@@ -1254,7 +1254,6 @@ void veto::ConstructGeometry()
      top->AddNode(sentsitive_tracker, 1, new TGeoTranslation(0, +100, fT1z));
      AddSensitiveVolume(sentsitive_tracker);
 
-
 // only for fastMuon simulation, otherwise output becomes too big
      if (fFastMuon && fFollowMuon){
         const char* Vol  = "TGeoVolume";
@@ -1271,7 +1270,7 @@ void veto::ConstructGeometry()
          if (strstr(classname,Vol)){
           if (strstr(volumename,Mag) || strstr(volumename,Rock)|| strstr(volumename,Ain) || strstr(volumename,Aout)){
             AddSensitiveVolume(gGeoManager->GetVolume(volumename));
-            cout << "veto added "<< volumename <<endl;
+            cout << "veto: made sensitive for following muons: "<< volumename <<endl;
           }
          }
          volumeiterator++;
