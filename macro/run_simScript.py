@@ -343,11 +343,11 @@ if simEngine == "Pythia6":
  P6gen.SetTarget("gamma/mu+","n0") # default "gamma/mu-","p+"
  primGen.AddGenerator(P6gen)
 # -----Particle Gun-----------------------
-if simEngine == "PG": 
+if simEngine == "PG":
   myPgun = ROOT.FairBoxGenerator(options.pID,1)
   myPgun.SetPRange(options.Estart,options.Eend)
-  myPgun.SetPhiRange(0, 360) # // Azimuth angle range [degree]
-  myPgun.SetXYZ(0.*u.cm, 0.*u.cm, 0.*u.cm) 
+  myPgun.SetPhiRange(0, 0) # // Azimuth angle range [degree]
+  myPgun.SetXYZ(0.*u.cm, 0.*u.cm, -15300.*u.cm)
   if options.charm!=0:
      myPgun.SetThetaRange(0,6) # // Pdefault for muon flux
      primGen.SetTarget(ship_geo.target.z0,0.)

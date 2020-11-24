@@ -1248,6 +1248,51 @@ void veto::ConstructGeometry()
 //     top->AddNode(after_shield, 0, new TGeoTranslation(0, 0, -3469));
 //     AddSensitiveVolume(after_shield);
 
+
+//--------------------------------------------------------------------------------------------
+     Float_t OFFSET = -15000;
+     Float_t GAP = 2 * m;
+     InitMedium("vacuum");
+     InitMedium("steel");
+     TGeoMedium* vacuum = gGeoManager->GetMedium("vacuum");
+     TGeoMedium* steel = gGeoManager->GetMedium("steel");
+
+
+     // MakeTrd2 (const char *name, TGeoMedium *medium, Double_t dx1, Double_t dx2, Double_t dy1, Double_t dy2, Double_t dz)
+//     TGeoVolume* magnet = gGeoManager->MakeTrd2("magnet", steel,
+//                                                magnet_shape[0] / 2 * m,
+//                                                magnet_shape[1] / 2 * m,
+//                                                magnet_shape[2] / 2 * m,
+//                                                magnet_shape[3] / 2 * m,
+//                                                magnet_shape[4] / 2 * m);
+
+     TGeoVolume* magnet = gGeoManager->MakeBox("magnet", steel,
+                                               magnet_shape[0] / 2 * m,
+                                               magnet_shape[1] / 2 * m,
+                                               magnet_shape[2] / 2 * m);
+     Float_t dZ = magnet_shape[2] / 2 * m;
+     magnet->SetLineColor(kGreen);
+
+     TGeoUniformMagField* mag_field = new TGeoUniformMagField(magnet_field[0],
+                                                              magnet_field[1],
+                                                              magnet_field[2]);
+     magnet->SetField(mag_field);
+     AddSensitiveVolume(magnet);
+
+     for (size_t index=0; index < n_magnets; ++index) {
+        Float_t coordinate = OFFSET + index * (2 * dZ + GAP);
+        top->AddNode(magnet, index, new TGeoTranslation(0, 0, coordinate));
+     }
+
+//     TGeoVolume* sensitive = gGeoManager->MakeBox("det", vacuum, 50*m, 50*m, 0.01*cm);
+//     sensitive->SetLineColor(kRed);
+//     //top->AddNode(sensitive, 0, new TGeoTranslation(0, 0, OFFSET + magnet_shape[2] * m + 10*m));
+//     top->AddNode(sensitive, 0, new TGeoTranslation(0, 0, OFFSET + 20*m));
+//     //for (int index = 0, step = -10000; step < -4000; step += 1000, index += 1) {
+//     //   top->AddNode(sensitive, index, new TGeoTranslation(0, 0, step));
+//     //}
+//     AddSensitiveVolume(sensitive);
+//----------------------------------------------------------------------------------------  ------
 // only for fastMuon simulation, otherwise output becomes too big
      if (fFastMuon && fFollowMuon){
         const char* Vol  = "TGeoVolume";

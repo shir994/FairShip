@@ -184,6 +184,18 @@ def configure(run,ship_geo):
                             ship_geo.Veto.innerSupportMed,ship_geo.Veto.lidThickness,ship_geo.Veto.sensitiveMed,\
                             ship_geo.Veto.outerSupportMed,ship_geo.Veto.decayMed,\
                             ship_geo.Veto.rib)
+ 
+ import json
+ import os
+ dirname = os.path.dirname(__file__)
+ with open (os.path.join(dirname, "../diff-model/magnet_params.json")) as f:
+    params = json.load(f)
+ Veto.SetMagnetShape(params['shape']['X'], params['shape']['Y'], params['shape']['Z'])
+ Veto.SetNMagnets(params['n_magnets'])
+ # Veto.SetTrapezMagnetShape(params['shape']['X_begin'], params['shape']['X_end'],
+ #                           params['shape']['Y_begin'], params['shape']['Y_end'],
+ #                           params['shape']['Z']);
+ Veto.SetMagnetField(params['field']['X'], params['field']['Y'], params['field']['Z'])
 
  detectorList.append(Veto)
  if hasattr(ship_geo,'tauMudet'): # don't support old designs
@@ -463,9 +475,9 @@ def configure(run,ship_geo):
   if ship_geo.muShieldDesign==6: fMagField.IncludeTarget(ship_geo.target.xy, ship_geo.target.z0, ship_geo.target.length)
   run.SetField(fMagField)
 #
- exclusionList = []
- #exclusionList = ["Muon","Ecal","Hcal","Strawtubes","TargetTrackers","NuTauTarget","HighPrecisionTrackers",\
- #                 "Veto","Magnet","MuonShield","TargetStation","NuTauMudet","EmuMagnet", "TimeDet", "UpstreamTagger"]
+ #exclusionList = []
+ exclusionList = ["Muon","Ecal","Hcal","Strawtubes","TargetTrackers","NuTauTarget","HighPrecisionTrackers",\
+                 "Veto","Magnet","MuonShield","TargetStation","NuTauMudet","EmuMagnet", "TimeDet", "UpstreamTagger"]
 
  for x in detectorList:
    if x.GetName() in exclusionList: continue
