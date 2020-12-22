@@ -969,12 +969,12 @@ void ShipMuonShield::ConstructGeometry()
 						   zEndOfAbsorb +
 						       fMuonShieldLength / 2. +dZ + 14.2 * cm)); // avoiding overlap with CoatWall
       }
-      TGeoCompositeShape *compRockD =
-	  new TGeoCompositeShape("compRockD", "(box3-box4)");
-      TGeoVolume *rockD   = new TGeoVolume("rockD", compRockD, concrete);
-      rockD->SetLineColor(11);  // grey
-      rockD->SetTransparency(50);
-      top->AddNode(rockD, 1, new TGeoTranslation(0, 0, zEndOfAbsorb + 2*dZ + dZD/2.));
+//      TGeoCompositeShape *compRockD =
+//	  new TGeoCompositeShape("compRockD", "(box3-box4)");
+//      TGeoVolume *rockD   = new TGeoVolume("rockD", compRockD, concrete);
+//      rockD->SetLineColor(11);  // grey
+//      rockD->SetTransparency(50);
+//      top->AddNode(rockD, 1, new TGeoTranslation(0, 0, zEndOfAbsorb + 2*dZ + dZD/2.));
 //
     } else {
      Fatal("ShipMuonShield","Design %i does not match implemented designs",fDesign);

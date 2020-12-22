@@ -60,10 +60,7 @@ class veto: public FairDetector
     void SetXYstart(Float_t b, Float_t fx, Float_t c, Float_t fy) {fXstart=b; zFocusX=fx; fYstart=c; zFocusY=fy;}
     void SetVesselStructure(Float_t a,Float_t b,Float_t c,TString d,Float_t l,TString e,TString f,TString v,Float_t r) {f_InnerSupportThickness=a;
       f_VetoThickness=b;f_OuterSupportThickness=c;supportMedIn_name=d;f_LidThickness=l;vetoMed_name=e;supportMedOut_name=f;decayVolumeMed_name=v;
-<<<<<<< Updated upstream
      f_RibThickness=r;}
-=======
-     f_RibThickness=r;ribMed_name=rm;}
 
     void SetMagnetShape(Float_t x, Float_t y, Float_t z) {
         magnet_shape.resize(3);
@@ -72,8 +69,8 @@ class veto: public FairDetector
     void SetMagnetField(Float_t x, Float_t y, Float_t z) {
         magnet_field = {x, y, z};
     }
-    void SetNMagnets(Int_t n_magnets) {
-        n_magnets = n_magnets;
+    void SetNMagnets(Int_t _n_magnets) {
+        n_magnets = _n_magnets;
     }
 
     void SetTrapezMagnetShape(Float_t x_begin, Float_t x_end, Float_t y_begin, Float_t y_end, Float_t z) {
@@ -81,7 +78,6 @@ class veto: public FairDetector
         magnet_shape = {x_begin, x_end, y_begin, y_end, z};
     }
 
->>>>>>> Stashed changes
 
     /**      This method is an example of how to add your own point
      *       of type vetoPoint to the clones array

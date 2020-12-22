@@ -1199,44 +1199,44 @@ void veto::ConstructGeometry()
       Double_t dy  = slopey*(zpos - zFocusY);
    // make the entrance window
       // add floor:
-      Double_t Length = zStartMagVol - zStartDecayVol - 2.2*m;
-      TGeoBBox *box = new TGeoBBox("box1",  10 * m, floorHeightA/2., Length/2.);
-      TGeoVolume *floor = new TGeoVolume("floor1",box,concrete);
-      floor->SetLineColor(11);
-      tDecayVol->AddNode(floor, 0, new TGeoTranslation(0, -10*m+floorHeightA/2.,Length/2.));
+//      Double_t Length = zStartMagVol - zStartDecayVol - 2.2*m;
+//      TGeoBBox *box = new TGeoBBox("box1",  10 * m, floorHeightA/2., Length/2.);
+//      TGeoVolume *floor = new TGeoVolume("floor1",box,concrete);
+//      floor->SetLineColor(11);
+//      tDecayVol->AddNode(floor, 0, new TGeoTranslation(0, -10*m+floorHeightA/2.,Length/2.));
       //entrance lid
-      TGeoVolume* T1Lid = MakeLidSegments(1,dx1,dy);
-      tDecayVol->AddNode(T1Lid, 1, new TGeoTranslation(0, 0, zpos - zStartDecayVol+f_LidThickness/2.1));
-
-      //without segment1, recalculate the z and (half)length of segment 2:
-      //Take into account to remove the between seg1 and seg2 due to straw-veto station.
-      //and add this gap to the total length.
-      Double_t tgap=fTub2z-fTub1z-fTub2length-fTub1length;
-      fTub2z=fTub1z+fTub2length+tgap/2.;
-      fTub2length=fTub2length+fTub1length+tgap/2.;
-      TGeoVolume* seg2 = MakeSegments(fTub2length,dx1,dy,slopex,slopey,floorHeightA);
-      tDecayVol->AddNode(seg2, 1, new TGeoTranslation(0, 0, fTub2z-zStartDecayVol));
+//      TGeoVolume* T1Lid = MakeLidSegments(1,dx1,dy);
+//      tDecayVol->AddNode(T1Lid, 1, new TGeoTranslation(0, 0, zpos - zStartDecayVol+f_LidThickness/2.1));
+//
+//      //without segment1, recalculate the z and (half)length of segment 2:
+//      //Take into account to remove the between seg1 and seg2 due to straw-veto station.
+//      //and add this gap to the total length.
+//      Double_t tgap=fTub2z-fTub1z-fTub2length-fTub1length;
+//      fTub2z=fTub1z+fTub2length+tgap/2.;
+//      fTub2length=fTub2length+fTub1length+tgap/2.;
+//      TGeoVolume* seg2 = MakeSegments(fTub2length,dx1,dy,slopex,slopey,floorHeightA);
+//      tDecayVol->AddNode(seg2, 1, new TGeoTranslation(0, 0, fTub2z-zStartDecayVol));
 //////////////?????
-      Length = fTub6length+fTub2length+3*m; // extend under ecal and muon detectors
-      box = new TGeoBBox("box2",  10 * m, floorHeightB/2., Length/2.);
-      floor = new TGeoVolume("floor2",box,concrete);
-      floor->SetLineColor(11);
-      tMaGVol->AddNode(floor, 0, new TGeoTranslation(0, -10*m+floorHeightB/2., Length/2.-2*fTub3length - 0.5*m));
+//      Length = fTub6length+fTub2length+3*m; // extend under ecal and muon detectors
+//      box = new TGeoBBox("box2",  10 * m, floorHeightB/2., Length/2.);
+//      floor = new TGeoVolume("floor2",box,concrete);
+//      floor->SetLineColor(11);
+//      tMaGVol->AddNode(floor, 0, new TGeoTranslation(0, -10*m+floorHeightB/2., Length/2.-2*fTub3length - 0.5*m));
 
       //TGeoVolume*  magnetInnerWalls = MakeMagnetSegment(3);
       //tMaGVol->AddNode(magnetInnerWalls, 1, new TGeoTranslation(0, 0, fTub4z - zStartMagVol));      
       
       
    // make the exit window
-      Double_t dx2 = slopex*(fTub6z +fTub6length - zFocusX);
-      TGeoVolume *T6Lid = gGeoManager->MakeBox("T6Lid",supportMedOut,dx2,dy,f_LidThickness/2.);
-      T6Lid->SetLineColor(18);
-      T6Lid->SetLineColor(2);
-      T6Lid->SetFillColor(2);
-      tMaGVol->AddNode(T6Lid, 1, new TGeoTranslation(0, 0,fTub6z+fTub6length+f_LidThickness/2.+0.1*cm - zStartMagVol));
-      //finisMakeSegments assembly and position
-      top->AddNode(tDecayVol, 1, new TGeoTranslation(0, 0,zStartDecayVol));
-      top->AddNode(tMaGVol, 1, new TGeoTranslation(0, 0,zStartMagVol));
+//      Double_t dx2 = slopex*(fTub6z +fTub6length - zFocusX);
+//      TGeoVolume *T6Lid = gGeoManager->MakeBox("T6Lid",supportMedOut,dx2,dy,f_LidThickness/2.);
+//      T6Lid->SetLineColor(18);
+//      T6Lid->SetLineColor(2);
+//      T6Lid->SetFillColor(2);
+//      tMaGVol->AddNode(T6Lid, 1, new TGeoTranslation(0, 0,fTub6z+fTub6length+f_LidThickness/2.+0.1*cm - zStartMagVol));
+//      //finisMakeSegments assembly and position
+//      top->AddNode(tDecayVol, 1, new TGeoTranslation(0, 0,zStartDecayVol));
+//      top->AddNode(tMaGVol, 1, new TGeoTranslation(0, 0,zStartMagVol));
 
 
 // Adding new veto after shield
@@ -1250,8 +1250,8 @@ void veto::ConstructGeometry()
 
 
 //--------------------------------------------------------------------------------------------
-     Float_t OFFSET = -15000;
-     Float_t GAP = 2 * m;
+     Float_t OFFSET = 0 * m;
+     Float_t GAP = 1 * cm;
      InitMedium("vacuum");
      InitMedium("steel");
      TGeoMedium* vacuum = gGeoManager->GetMedium("vacuum");
@@ -1278,19 +1278,18 @@ void veto::ConstructGeometry()
                                                               magnet_field[2]);
      magnet->SetField(mag_field);
      AddSensitiveVolume(magnet);
-
-     for (size_t index=0; index < n_magnets; ++index) {
+     std::cout << "MAG" << n_magnets << std::endl;
+     for (Int_t index=0; index < n_magnets; ++index) {
         Float_t coordinate = OFFSET + index * (2 * dZ + GAP);
+        std:: cout << "Adding MAG " << index << " Z " << coordinate << std::endl;
         top->AddNode(magnet, index, new TGeoTranslation(0, 0, coordinate));
      }
 
-//     TGeoVolume* sensitive = gGeoManager->MakeBox("det", vacuum, 50*m, 50*m, 0.01*cm);
+//     Float_t sens_plane_offset = OFFSET + (n_magnets - 1) * (2 * dZ + GAP) + dZ + 1*cm;
+//     TGeoVolume* sensitive = gGeoManager->MakeBox("det", vacuum, 5*m, 5*m, 0.01*cm);
 //     sensitive->SetLineColor(kRed);
 //     //top->AddNode(sensitive, 0, new TGeoTranslation(0, 0, OFFSET + magnet_shape[2] * m + 10*m));
-//     top->AddNode(sensitive, 0, new TGeoTranslation(0, 0, OFFSET + 20*m));
-//     //for (int index = 0, step = -10000; step < -4000; step += 1000, index += 1) {
-//     //   top->AddNode(sensitive, index, new TGeoTranslation(0, 0, step));
-//     //}
+//     top->AddNode(sensitive, 0, new TGeoTranslation(0, 0, sens_plane_offset));
 //     AddSensitiveVolume(sensitive);
 //----------------------------------------------------------------------------------------  ------
 // only for fastMuon simulation, otherwise output becomes too big

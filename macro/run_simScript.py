@@ -37,7 +37,7 @@ simEngine    = "Pythia8"  # "Genie" # Ntuple
 inclusive    = "c"    # True = all processes if "c" only ccbar -> HNL, if "b" only bbar -> HNL, if "bc" only Bc+/Bc- -> HNL, and for darkphotons: if meson = production through meson decays, pbrem = proton bremstrahlung, qcd = ffbar -> DP.
 
 MCTracksWithHitsOnly   = False  # copy particles which produced a hit and their history
-MCTracksWithEnergyCutOnly = True # copy particles above a certain kin energy cut
+MCTracksWithEnergyCutOnly = False # copy particles above a certain kin energy cut
 MCTracksWithHitsOrEnergyCut = False # or of above, factor 2 file size increase compared to MCTracksWithEnergyCutOnly
 
 charmonly    = False  # option to be set with -A to enable only charm decays, charm x-sec measurement  
@@ -344,10 +344,11 @@ if simEngine == "Pythia6":
  primGen.AddGenerator(P6gen)
 # -----Particle Gun-----------------------
 if simEngine == "PG":
+  if options.fastMuon:    modules['Veto'].SetFastMuon()
   myPgun = ROOT.FairBoxGenerator(options.pID,1)
   myPgun.SetPRange(options.Estart,options.Eend)
   myPgun.SetPhiRange(0, 0) # // Azimuth angle range [degree]
-  myPgun.SetXYZ(0.*u.cm, 0.*u.cm, -15300.*u.cm)
+  myPgun.SetXYZ(0.*u.cm, 0.*u.cm, -3.*u.m)
   if options.charm!=0:
      myPgun.SetThetaRange(0,6) # // Pdefault for muon flux
      primGen.SetTarget(ship_geo.target.z0,0.)

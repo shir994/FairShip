@@ -340,7 +340,7 @@ with ConfigRegistry.register_config("basic") as c:
         c.muShield.Field = 1.7  # Tesla
         c.muShield.dZ1 = 0.35 * u.m + zGap
         c.muShield.dZ2 = 2.26 * u.m + zGap
-        c.muShield.dZ3 = 2.08 * u.m + zGavetop
+        c.muShield.dZ3 = 2.08 * u.m + zGap
         c.muShield.dZ4 = 2.07 * u.m + zGap
         c.muShield.dZ5 = 2.81 * u.m + zGap
         c.muShield.dZ6 = 2.48 * u.m + zGap
