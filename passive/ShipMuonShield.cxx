@@ -131,7 +131,7 @@ ShipMuonShield::ShipMuonShield(TString params, const char* name, const Int_t Des
  fStepGeo = StepGeo;
  fWithCoMagnet = withCoMagnet;
  if (fDesign==1){
-     fMiniShieldLength = L1;   
+     fMuonShieldLength = L1;   
     }
  if (fDesign==2 || fDesign==3 || fDesign==4 ){
      Fatal("ShipMuonShield","Design %i not anymore supported",fDesign);
@@ -147,7 +147,7 @@ ShipMuonShield::ShipMuonShield(TString params, const char* name, const Int_t Des
      dZ7 = L7;
      dZ8 = L8;
      dXgap= gap;
-     fMiniShieldLength = 2*(dZ1+dZ2+dZ3+dZ4+dZ5+dZ6+dZ7+dZ8) + LE ; //leave some space for nu-tau detector   
+     fMuonShieldLength = 2*(dZ1+dZ2+dZ3+dZ4+dZ5+dZ6+dZ7+dZ8) + LE ; //leave some space for nu-tau detector   
     }
     
  if (fDesign>=7){
@@ -159,14 +159,14 @@ ShipMuonShield::ShipMuonShield(TString params, const char* name, const Int_t Des
      dZ6 = L6;
      dZ7 = L7;
      dZ8 = L8;
-     fMiniShieldLength =
+     fMuonShieldLength =
    2 * (dZ1 + dZ2 + dZ3 + dZ4 + dZ5 + dZ6 + dZ7 + dZ8) + LE;
    }
     
  fFloor = (fDesign >= 7) ? floor : 0;
 
- zEndOfAbsorb = Z + dZ0 - fMiniShieldLength/2.;   
- if(fDesign>=6){zEndOfAbsorb = Z - fMiniShieldLength/2.;}
+ zEndOfAbsorb = Z + dZ0 - fMuonShieldLength/2.;   
+ if(fDesign>=6){zEndOfAbsorb = Z - fMuonShieldLength/2.;}
  fSupport = true;
  optParams = params;
 }
