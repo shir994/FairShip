@@ -19,6 +19,10 @@ import charmDet_conf as shipDet_conf
 import geomGeant4
 import saveBasicParameters
 
+from collections import defaultdict
+import numpy as np
+import json
+
 parser = ArgumentParser()
 group = parser.add_mutually_exclusive_group()
 
@@ -135,7 +139,7 @@ saveBasicParameters.execute("%s/geofile_full.%s.root" % (options.outputDir, tag)
 if options.processMiniShield:
     m = 0.
     lGeo = r.gGeoManager
-    miniShield = lGeo.GetVolume('MiniShieldArea')
+    miniShield = lGeo.GetVolume('MuonShieldArea')
     nodes = miniShield.GetNodes()
     for node in nodes:
       volume = node.GetVolume()
