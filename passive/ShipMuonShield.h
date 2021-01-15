@@ -12,6 +12,7 @@
 #include "TString.h"
 #include <vector>
 #include <array>
+#include <math.h>
 
 enum class FieldDirection : bool { up, down };
 
@@ -42,6 +43,15 @@ class ShipMuonShield : public FairModule
     fSupport = supports;
     FairLogger::GetLogger()->Warning(MESSAGE_ORIGIN, "Setting supports to %s. This will not have any effect if called after the geometry has been constructed.", fSupport ? "true" : "false");
   }
+
+  // H_zone is h_l(r) from PG Memo and W_zone is 2 * f_l(r)
+  // Inputs and outputs are in [cm]
+  Double_t CalculateGapWidth(Double_t _H_zone, Double_t _W_zone) {
+    Double_t H_zone = _H_zone / 100;
+    Double_t W_zone = _W_zone / 100;
+    return (H_steel * H_zone + H_steel * W_zone + 625000. / M_PI * B_avg * _delta) * 1.5 /
+           (0.25 * J * H_zone - H_steel) * 100;
+  }
     
  protected:
   
@@ -58,6 +68,12 @@ class ShipMuonShield : public FairModule
   Bool_t fStepGeo;
   Bool_t fWithConstAbsorberField;
   Bool_t fWithConstShieldField;
+
+
+  const Double_t J = pow(10., 6.); //[A/m^2]
+  const Double_t H_steel = 3000.0; //[A/m]
+  const Double_t B_avg = 1.8; //[T]
+  const Double_t _delta = 8 * 0.5 * pow(10., -3.); //[m]
 
   void CreateArb8(TString arbName, TGeoMedium *medium, Double_t dZ,
 		  std::array<Double_t, 16> corners, Int_t color,

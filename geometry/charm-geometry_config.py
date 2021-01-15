@@ -4,35 +4,17 @@ import ROOT
 # the following params should be passed through 'ConfigRegistry.loadpy' method
 # none for the moment
 with ConfigRegistry.register_config("basic") as c:
-
-    # c.Bfield = AttrDict(z=0 * u.cm)
-    # c.Bfield.max = 0 # 1.4361*u.kilogauss  # was 1.15 in EOI
-    # c.Bfield.y   = 0.
-    # c.Bfield.x   = 0.
     c.optParams = ""
-    c.MufluxSpectrometer = AttrDict(z = 0*u.cm)  
-    # False = charm cross-section; True = muon flux measurement 
     
     if "targetOpt" not in globals():
        targetOpt = 18 # add extra 20cm of tungsten as per 13/06/2017
-
-    if "Setup" not in globals(): #muon flux or charm xsec measurement
-      Setup = 0    
-
-    if "cTarget" not in globals():
-      cTarget = 3
-
-    if Setup == 0: 
-     c.MufluxSpectrometer.muflux = True
-    else: 
-     c.MufluxSpectrometer.muflux = False
 
     if "muShieldStepGeo" not in globals():
         muShieldStepGeo = False
     if "muShieldWithCobaltMagnet" not in globals():
         muShieldWithCobaltMagnet = 0
     if "muShieldDesign" not in globals():
-        muShieldDesign = 5
+        muShieldDesign = 9
     if "muShieldGeo" not in globals():
         muShieldGeo = None
 
@@ -65,10 +47,10 @@ with ConfigRegistry.register_config("basic") as c:
     c.decayVolume.length     =   50*u.m
 
     c.hadronAbsorber              =  AttrDict(z=0*u.cm)
-    c.hadronAbsorber.length =  2.4*u.m    
-    
+    c.hadronAbsorber.length =  2.4*u.m
     c.hadronAbsorber.z     =   - c.hadronAbsorber.length/2.
 
+    # Target
     c.target               =  AttrDict(z=0*u.cm)
     c.targetOpt            = targetOpt
 
@@ -122,19 +104,8 @@ with ConfigRegistry.register_config("basic") as c:
     #### MUON SHIELD
     c.muShield = AttrDict(z=0 * u.cm)
     c.muShieldDesign = muShieldDesign
-    c.muShield.Field = 1.8  # in units of Tesla expected by ShipMuonShield
-    # design 4,5,6
     c.muShield.LE = 0 * u.m  # - 0.5 m air - Goliath: 4.5 m - 0.5 m air - nu-tau mu-det: 3 m - 0.5 m air. finally 10m asked by Giovanni
-    c.muShield.dZ0 = 2.5 * u.m if muShieldDesign == 6 else 1 * u.m
-    c.muShield.dZ1 = 3.5 * u.m
-    c.muShield.dZ2 = 6. * u.m
-    c.muShield.dZ3 = 2.5 * u.m
-    c.muShield.dZ4 = 3. * u.m
-    c.muShield.dZ5 = 0. * u.m  # 28Oct #5 removed
-    c.muShield.dZ6 = 3. * u.m
-    c.muShield.dZ7 = 3. * u.m
-    c.muShield.dZ8 = 3. * u.m
-    c.muShield.dXgap = 0.2 * u.m
+    c.muShield.dZ0 = 1 * u.m
     c.muShield.dZgap = 0.01 * u.m
 
     c.muShieldStepGeo = muShieldStepGeo
@@ -142,17 +113,7 @@ with ConfigRegistry.register_config("basic") as c:
 
     # zGap to compensate automatic shortening of magnets
     zGap = 0.5 * c.muShield.dZgap  # halflengh of gap
-    if muShieldDesign == 7:
-        c.muShield.dZ1 = 0.7 * u.m + zGap
-        c.muShield.dZ2 = 1.7 * u.m + zGap
-        c.muShield.dZ3 = 2.0 * u.m + zGap
-        c.muShield.dZ4 = 2.0 * u.m + zGap
-        c.muShield.dZ5 = 2.75 * u.m + zGap
-        c.muShield.dZ6 = 2.4 * u.m + zGap
-        c.muShield.dZ7 = 3.0 * u.m + zGap
-        c.muShield.dZ8 = 2.35 * u.m + zGap
-        c.muShield.dXgap = 0. * u.m
-    elif muShieldDesign == 9:
+    if muShieldDesign == 9:
         c.muShield.Field = 1.7  # Tesla
         c.muShield.dZ1 = 0. * u.m # + zGap
         c.muShield.dZ2 = 0. * u.m # + zGap
@@ -207,7 +168,7 @@ with ConfigRegistry.register_config("basic") as c:
         ) + c.muShield.LE
         c.muShield.z = c.hadronAbsorber.z + c.hadronAbsorber.length / 2 + c.muShield.length / 2 + 0 * u.m
         c.SensPlane = AttrDict(z=0 * u.cm)
-        c.SensPlane.z = 6* u.m # c.muShield.z + c.muShield.length / 2 + 0.5 * u.m
+        c.SensPlane.z = c.hadronAbsorber.z + c.hadronAbsorber.length / 2 + 6 * u.m
 
     c.hadronAbsorber.WithConstField = True
     c.muShield.WithConstField = True
