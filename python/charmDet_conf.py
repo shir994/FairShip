@@ -42,7 +42,7 @@ def configure(run,ship_geo,Gfield=''):
         ship_geo.muShieldWithCobaltMagnet, ship_geo.muShieldStepGeo,
         ship_geo.hadronAbsorber.WithConstField, ship_geo.muShield.WithConstField)
     detectorList.append(MiniShield)
-  else:
+ else:
    if ship_geo.muShieldDesign in [3, 4, 5, 6, 7, 9]:
     MuonShield = ROOT.ShipMuonShield(
        "MuonShield", ship_geo.muShieldDesign, "ShipMuonShield",
