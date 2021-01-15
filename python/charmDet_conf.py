@@ -52,7 +52,6 @@ def configure(run,ship_geo,Gfield=''):
  detectorList.append(MuonShield)
 
  TargetStation = ROOT.MufluxTargetStation("MufluxTargetStation",ship_geo.target.length,ship_geo.hadronAbsorber.length, ship_geo.target.z,ship_geo.hadronAbsorber.z,ship_geo.targetOpt,ship_geo.target.sl)
-
  TargetStation.SetIronAbsorber(ship_geo.MufluxTargetStation.absorber_x,ship_geo.MufluxTargetStation.absorber_y)
  TargetStation.SetAbsorberCutout(ship_geo.MufluxTargetStation.absorbercutout_x, ship_geo.MufluxTargetStation.absorbercutout_y)
  TargetStation.SetIronShield(ship_geo.MufluxTargetStation.ironshield_x, ship_geo.MufluxTargetStation.ironshield_y, ship_geo.MufluxTargetStation.ironshield_z)
@@ -73,8 +72,6 @@ def configure(run,ship_geo,Gfield=''):
 
  TargetStation.SetLayerPosMat(ship_geo.target.xy,slices_length,slices_material)
  detectorList.append(TargetStation)
-
- #detectorList.append(MufluxSpectrometer)
 
  Veto = ROOT.veto("Veto", ROOT.kTRUE)  # vacuum tank
  Veto.SetSensePlaneZ(ship_geo.SensPlane.z)
