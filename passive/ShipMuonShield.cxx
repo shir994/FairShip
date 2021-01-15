@@ -116,6 +116,61 @@ ShipMuonShield::ShipMuonShield(const char* name, const Int_t Design, const char*
  fSupport = true;
 }
 
+ShipMuonShield::ShipMuonShield(TString params, const char* name, const Int_t Design, const char* Title,
+                               Double_t Z, Double_t L0, Double_t L1, Double_t L2, Double_t L3, Double_t L4, Double_t L5, Double_t L6,
+                               Double_t L7, Double_t L8, Double_t gap, Double_t LE, Double_t, Double_t floor, Double_t field,
+                               const Int_t withCoMagnet, const Bool_t StepGeo,
+                               const Bool_t WithConstAbsorberField, const Bool_t WithConstShieldField)
+  : FairModule(name ,Title)
+{
+ fDesign = Design;
+ fField  = field;
+ fGeofile = "";
+ fWithConstAbsorberField = WithConstAbsorberField;
+ fWithConstShieldField = WithConstShieldField;
+ fStepGeo = StepGeo;
+ fWithCoMagnet = withCoMagnet;
+ if (fDesign==1){
+     fMiniShieldLength = L1;   
+    }
+ if (fDesign==2 || fDesign==3 || fDesign==4 ){
+     Fatal("ShipMuonShield","Design %i not anymore supported",fDesign);
+    }
+ if (fDesign==5 || fDesign==6){
+     dZ0 = L0;
+     dZ1 = L1;
+     dZ2 = L2;
+     dZ3 = L3;
+     dZ4 = L4;
+     dZ5 = L5;
+     dZ6 = L6;
+     dZ7 = L7;
+     dZ8 = L8;
+     dXgap= gap;
+     fMiniShieldLength = 2*(dZ1+dZ2+dZ3+dZ4+dZ5+dZ6+dZ7+dZ8) + LE ; //leave some space for nu-tau detector   
+    }
+    
+ if (fDesign>=7){
+     dZ1 = L1;
+     dZ2 = L2;
+     dZ3 = L3;
+     dZ4 = L4;
+     dZ5 = L5;
+     dZ6 = L6;
+     dZ7 = L7;
+     dZ8 = L8;
+     fMiniShieldLength =
+   2 * (dZ1 + dZ2 + dZ3 + dZ4 + dZ5 + dZ6 + dZ7 + dZ8) + LE;
+   }
+    
+ fFloor = (fDesign >= 7) ? floor : 0;
+
+ zEndOfAbsorb = Z + dZ0 - fMiniShieldLength/2.;   
+ if(fDesign>=6){zEndOfAbsorb = Z - fMiniShieldLength/2.;}
+ fSupport = true;
+ optParams = params;
+}
+
 // -----   Private method InitMedium 
 Int_t ShipMuonShield::InitMedium(TString name) 
 {
@@ -409,6 +464,67 @@ void ShipMuonShield::CreateMagnet(TString magnetName,TGeoMedium* medium,TGeoVolu
       break;
     }
   }
+Int_t ShipMuonShield::mini_Initialize(std::vector<TString> &magnetName,
+        std::vector<FieldDirectionM> &fieldDirection,
+        std::vector<Double_t> &dXIn, std::vector<Double_t> &dYIn,
+        std::vector<Double_t> &dXOut, std::vector<Double_t> &dYOut,
+        std::vector<Double_t> &dZ, std::vector<Double_t> &midGapIn,
+        std::vector<Double_t> &midGapOut,
+        std::vector<Double_t> &HmainSideMagIn,
+        std::vector<Double_t> &HmainSideMagOut,
+        std::vector<Double_t> &gapIn, std::vector<Double_t> &gapOut,
+        std::vector<Double_t> &Z){
+
+  double d = 0.;
+  optParams.ReplaceAll(",", " ");
+  auto ss = std::istringstream(std::string(optParams));
+  // std::vector<Double_t> digiOptParams
+  const auto digiOptParams = std::vector<double> (std::istream_iterator<double>(ss),  std::istream_iterator<double>());
+  for (auto i = digiOptParams.begin(); i != digiOptParams.end(); ++i)
+    std::cout << *i << ' ';
+  
+  fField = digiOptParams[0];
+  Int_t nParts = Int_t(digiOptParams[1]);
+
+  // fieldDirection.reserve(nParts);
+  // magnetName.reserve(nParts);
+
+  for (auto i :
+       {&dXIn, &dXOut, &dYIn, &dYOut, &dZ, &midGapIn, &midGapOut,
+  &HmainSideMagIn, &HmainSideMagOut, &gapIn, &gapOut, &Z}) {
+    i->reserve(nParts);
+  }
+  Double_t zgap = 10.;
+
+  Double_t start_position = 2.;
+  int fixed_shift = 2;
+  for (unsigned int i = 0; i < nParts; i++){
+    if (i < nParts/2){
+      fieldDirection.push_back(FieldDirectionM::up);
+    }else
+    {
+      fieldDirection.push_back(FieldDirectionM::down);
+    }
+    magnetName.push_back("mini_shield_part_" + std::to_string(i));
+
+    dXIn[i] = digiOptParams[i*7+fixed_shift + 0] * cm;
+    dXOut[i] = digiOptParams[i*7+fixed_shift + 1] * cm;
+    dYIn[i] = digiOptParams[i*7+fixed_shift + 2] * cm;
+    dYOut[i] = digiOptParams[i*7+fixed_shift + 3] * cm;
+    gapIn[i] = digiOptParams[i*7+fixed_shift + 4] * cm;
+    gapOut[i] = digiOptParams[i*7+fixed_shift + 5] * cm;
+
+    midGapIn[i] = 0.;
+    midGapOut[i] = 0.;
+    HmainSideMagIn[i] = dYIn[i] / 2;
+    HmainSideMagOut[i] = dYOut[i] / 2;
+
+    dZ[i] = digiOptParams[i*7+fixed_shift + 6] * cm - zgap / 2;
+    Z[i] = i>0? Z[i-1] + dZ[i] + dZ[i-1] + zgap : start_position + dZ[0] + zgap;
+    std::cout<<" MAGENT SIZE IS "<< dZ[i] <<"\n";
+  }
+  return nParts;
+}
 
 Int_t ShipMuonShield::Initialize(std::vector<TString> &magnetName,
 				std::vector<FieldDirection> &fieldDirection,
@@ -743,6 +859,30 @@ void ShipMuonShield::ConstructGeometry()
     TGeoMedium *iron  =gGeoManager->GetMedium("iron");
     InitMedium("Concrete");
     TGeoMedium *concrete  =gGeoManager->GetMedium("Concrete");
+    
+    if (optParams.Length() > 3){
+        Double_t ironField = fField*tesla;
+        TGeoUniformMagField *magFieldIron = new TGeoUniformMagField(0.,ironField,0.);
+        TGeoUniformMagField *RetField     = new TGeoUniformMagField(0.,-ironField,0.);
+        TGeoUniformMagField *ConRField    = new TGeoUniformMagField(-ironField,0.,0.);
+        TGeoUniformMagField *ConLField    = new TGeoUniformMagField(ironField,0.,0.);
+        TGeoUniformMagField *fields[4] = {magFieldIron,RetField,ConRField,ConLField};
+        std::vector<FieldDirectionM> fieldDirection;
+        
+        std::vector<TString> magnetName;
+        std::vector<Double_t> dXIn, dYIn, dXOut, dYOut, dZf, midGapIn, midGapOut, HmainSideMagIn, HmainSideMagOut, gapIn, gapOut, Z;
+        const Int_t nParts = mini_Initialize(magnetName, fieldDirection, dXIn, dYIn, dXOut, dYOut, dZf, midGapIn, midGapOut, HmainSideMagIn, HmainSideMagOut, gapIn, gapOut, Z);
+
+        for (unsigned int i = 0; i<nParts; i++){
+          CreateMagnet(magnetName[i], steel, tShield, fields,fieldDirection[i],
+           dXIn[i],dYIn[i],dXOut[i],dYOut[i],dZf[i],
+           midGapIn[i],midGapOut[i],HmainSideMagIn[i],HmainSideMagOut[i],
+           gapIn[i],gapOut[i],Z[i],0, fStepGeo);
+        }
+        top->AddNode(tShield, 1);
+        return;
+    }
+    
     
     if (fDesign >= 5 && fDesign <= 9) {
       Double_t ironField = fField*tesla;
