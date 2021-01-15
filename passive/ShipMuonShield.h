@@ -89,7 +89,7 @@ class ShipMuonShield : public FairModule
 		  std::vector<Double_t> &Z);
 
   Int_t mini_Initialize(std::vector<TString> &magnetName,
-      std::vector<FieldDirectionM> &fieldDirection,
+      std::vector<FieldDirection> &fieldDirection,
       std::vector<Double_t> &dXIn, std::vector<Double_t> &dYIn,
       std::vector<Double_t> &dXOut, std::vector<Double_t> &dYOut,
       std::vector<Double_t> &dZ, std::vector<Double_t> &midGapIn,

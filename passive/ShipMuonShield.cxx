@@ -465,7 +465,7 @@ void ShipMuonShield::CreateMagnet(TString magnetName,TGeoMedium* medium,TGeoVolu
     }
   }
 Int_t ShipMuonShield::mini_Initialize(std::vector<TString> &magnetName,
-        std::vector<FieldDirectionM> &fieldDirection,
+        std::vector<FieldDirection> &fieldDirection,
         std::vector<Double_t> &dXIn, std::vector<Double_t> &dYIn,
         std::vector<Double_t> &dXOut, std::vector<Double_t> &dYOut,
         std::vector<Double_t> &dZ, std::vector<Double_t> &midGapIn,
@@ -500,10 +500,10 @@ Int_t ShipMuonShield::mini_Initialize(std::vector<TString> &magnetName,
   int fixed_shift = 2;
   for (unsigned int i = 0; i < nParts; i++){
     if (i < nParts/2){
-      fieldDirection.push_back(FieldDirectionM::up);
+      fieldDirection.push_back(FieldDirection::up);
     }else
     {
-      fieldDirection.push_back(FieldDirectionM::down);
+      fieldDirection.push_back(FieldDirection::down);
     }
     magnetName.push_back("mini_shield_part_" + std::to_string(i));
 
@@ -867,7 +867,7 @@ void ShipMuonShield::ConstructGeometry()
         TGeoUniformMagField *ConRField    = new TGeoUniformMagField(-ironField,0.,0.);
         TGeoUniformMagField *ConLField    = new TGeoUniformMagField(ironField,0.,0.);
         TGeoUniformMagField *fields[4] = {magFieldIron,RetField,ConRField,ConLField};
-        std::vector<FieldDirectionM> fieldDirection;
+        std::vector<FieldDirection> fieldDirection;
         
         std::vector<TString> magnetName;
         std::vector<Double_t> dXIn, dYIn, dXOut, dYOut, dZf, midGapIn, midGapOut, HmainSideMagIn, HmainSideMagOut, gapIn, gapOut, Z;
