@@ -55,6 +55,7 @@ parser.add_argument("--muShieldDesign", dest="ds", help="5=TP muon shield, 6=mag
                     default=9, type=int)
 parser.add_argument("--optParams", dest='optParams', required=False, default=False)
 parser.add_argument("--processMiniShield", dest='processMiniShield', action="store_true", required=False)
+parser.add_argument("--energyScaleFactor", dest='energyScaleFactor', default=1, required=False, type=float)
 
 options = parser.parse_args()
 
@@ -97,7 +98,7 @@ else:
     primGen.SetTarget(ship_geo.target.z0 + 50 * u.m, 0.)
 
 MuonBackgen = r.MuonBackGenerator()
-MuonBackgen.Init(options.inputFile, options.firstEvent,options.phiRandom)
+MuonBackgen.Init(options.inputFile, options.firstEvent,options.phiRandom, options.energyScaleFactor)
 if options.sameSeed:
     MuonBackgen.SetSameSeed(options.sameSeed)
 primGen.AddGenerator(MuonBackgen)
