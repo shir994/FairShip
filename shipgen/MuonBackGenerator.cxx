@@ -23,10 +23,10 @@ MuonBackGenerator::MuonBackGenerator() {
 // -------------------------------------------------------------------------
 // -----   Default constructor   -------------------------------------------
 Bool_t MuonBackGenerator::Init(const char* fileName) {
-  return Init(fileName, 0, false);
+  return Init(fileName, 0, 1., false);
 }
 // -----   Default constructor   -------------------------------------------
-Bool_t MuonBackGenerator::Init(const char* fileName, const int firstEvent, const Double_t mfactor,const Bool_t fl = false ) {
+Bool_t MuonBackGenerator::Init(const char* fileName, const int firstEvent, const Double_t mfactor, const Bool_t fl = false ) {
   fLogger = FairLogger::GetLogger();
   fLogger->Info(MESSAGE_ORIGIN,"Opening input file %s",fileName);
   if (0 == strncmp("/eos",fileName,4) ) {

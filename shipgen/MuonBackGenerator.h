@@ -21,7 +21,7 @@ class MuonBackGenerator : public FairGenerator
   
   /** public method ReadEvent **/
   Bool_t ReadEvent(FairPrimaryGenerator*);  
-  virtual Bool_t Init(const char*, int, const Bool_t fl, const Double_t mfactor); //!
+  virtual Bool_t Init(const char*, int, const Double_t, const Bool_t fl); //!
   virtual Bool_t Init(const char*); //!
   Int_t GetNevents();//!
   void CloseFile();//!

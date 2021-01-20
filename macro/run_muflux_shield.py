@@ -99,7 +99,7 @@ else:
     primGen.SetTarget(ship_geo.target.z0 + 50 * u.m, 0.)
 
 MuonBackgen = r.MuonBackGenerator()
-MuonBackgen.Init(options.inputFile, options.firstEvent,options.phiRandom, options.energyScaleFactor)
+MuonBackgen.Init(options.inputFile, options.firstEvent, options.energyScaleFactor, options.phiRandom)
 if options.sameSeed:
     MuonBackgen.SetSameSeed(options.sameSeed)
 primGen.AddGenerator(MuonBackgen)
