@@ -55,6 +55,7 @@ parser.add_argument("--muShieldDesign", dest="ds", help="5=TP muon shield, 6=mag
                     default=9, type=int)
 parser.add_argument("--optParams", dest='optParams', required=False, default=False)
 parser.add_argument("--processMiniShield", dest='processMiniShield', action="store_true", required=False)
+parser.add_argument("--zoneSize", dest='zone', required=False, default=0, type=int)
 parser.add_argument("--energyScaleFactor", dest='energyScaleFactor', default=1, required=False, type=float)
 
 options = parser.parse_args()
@@ -156,7 +157,7 @@ if options.processMiniShield:
         return abs(hit.GetX()) <= bound[0] and abs(hit.GetY()) <= bound[1]
 
     def process_file(filename,  muons_output_name = "muons_output", epsilon=1e-9, debug=True,
-                     apply_acceptance_cut=False):
+                     apply_acceptance_cut=False, acceptance_size=(330, 530)):
         directory = os.path.dirname(os.path.abspath(filename))
         file = r.TFile(filename)
 
@@ -181,7 +182,7 @@ if options.processMiniShield:
                 if hit.GetTrackID() >= 0 and\
                    abs(mc_pdgs[hit.GetTrackID()]):
                     if apply_acceptance_cut:
-                        if check_acceptance(hit):
+                        if check_acceptance(hit, bound=acceptance_size):
                             # Middle or inital stats??
                             pos_begin = r.TVector3()
                             hit.Position(pos_begin)
@@ -219,7 +220,7 @@ if options.processMiniShield:
         print("Total events returned: {}".format(len(muons_stats)))
         return np.array(muons_stats)
 
-    muons_stats = process_file(os.path.join(options.outputDir,"ship.MiniShield.MuonBack.root"), apply_acceptance_cut=True, debug=False)
+    muons_stats = process_file(os.path.join(options.outputDir,"ship.MiniShield.MuonBack.root"), apply_acceptance_cut=True, debug=False, acceptance_size=(options.zone, options.zone))
     if len(muons_stats) == 0:
           muon_kinematics = np.array([])
     else:
