@@ -15,12 +15,12 @@
 
 using namespace std;
 
-Bool_t CosmicsGenerator::Init(string mOption){
+Bool_t GeneralGun::Init(string mOption){
 	pdf_name = 'simple_gauss';
 	return kTRUE;
 }
 // -----   Passing the event   -----------------------------------------
-Bool_t CosmicsGenerator::ReadEvent(FairPrimaryGenerator* cpg){
+Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 
 	//Position
 
@@ -76,4 +76,4 @@ Bool_t CosmicsGenerator::ReadEvent(FairPrimaryGenerator* cpg){
 }
 // ---------------------------------------------------------------------
 
-ClassImp(CosmicsGenerator)
+ClassImp(GeneralGun)
