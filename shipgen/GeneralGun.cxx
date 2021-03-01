@@ -18,14 +18,15 @@ using namespace std;
 Bool_t GeneralGun::Init(string mOption){
 
 	rng  = new TRandom3(gRandom->GetSeed());
+	position_pdf = 0;
+	momentum_pdf = 0;
 	// fNevents; = 0;
 	return kTRUE;
 }
 // -----   Passing the event   -----------------------------------------
 Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 
-	position_pdf = 0;
-	momentum_pdf = 0;
+
 	PID = 13;
 	//Position
 	double cm = 1.;

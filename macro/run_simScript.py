@@ -358,6 +358,7 @@ if simEngine == "PG":
   # -----General Particle Gun-----------------------
 if simEngine == "GPG": 
   myPgun = ROOT.GeneralGun()
+  myPgun.Init()
   primGen.AddGenerator(myPgun)
 # -----muon DIS Background------------------------
 if simEngine == "muonDIS":
