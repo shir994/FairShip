@@ -10,14 +10,15 @@
 #include "GeneralGun.h"
 #include "TDatabasePDG.h"               // for TDatabasePDG
 #include "TMath.h"
-#include <boost/json/src.hpp>
-#include <G4INCLRandom.hh>
+//#include <boost/json/src.hpp>
+// #include <G4INCLRandom.hh>
 
 using namespace std;
 GeneralGun::GeneralGun() {}
 
 Bool_t GeneralGun::Init(string mOption){
 	pdf_name = 'simple_gauss';
+	rng  = new TRandom3(gRandom->GetSeed());
 	n_EVENTS = 0;
 	return kTRUE;
 }
@@ -29,13 +30,13 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 	switch(pdf_name){
 		case "simple_gauss":
 			double sigma = 1.*cm;
-			x = G4INCL::Random::gauss(sigma);
-			y = G4INCL::Random::gauss(sigma);
+			x = rng->Gaus(0, sigma);//G4INCL::Random::gauss(sigma);
+			y = rng->Gaus(0, sigma);//G4INCL::Random::gauss(sigma);
 
 		case "flat":
 			double range = 1.*cm;
-			x = (G4INCL::Random::shoot()-0.5) * range;
-			y = (G4INCL::Random::shoot()-0.5) * range;
+			x = rng->Uniform(-range, range);//(G4INCL::Random::shoot()-0.5) * range;
+			y = rng->Uniform(-range, range); //(G4INCL::Random::shoot()-0.5) * range;
 
 		case "shifted_gauss":
 			double sigma = 1*cm;
@@ -46,8 +47,8 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 			int sample_count = 0;
 
 			while (true){
-				x = G4INCL::Random::gauss(sigma) + x_shift;
-				y = G4INCL::Random::gauss(sigma) + y_shift;
+				x = rng->Gaus(x_shift, sigma); //G4INCL::Random::gauss(sigma) + x_shift;
+				y = rng->Gaus(y_shift, sigma); //G4INCL::Random::gauss(sigma) + y_shift;
 				if ((TMath::Abs(x) < x_limit) && (TMath::Abs(y) < y_limit)){
 					success_flag = true;
 					break;

@@ -23,7 +23,7 @@ class GeneralGun : public FairGenerator{
   	/** constructor,destructor **/
 	GeneralGun(){};  
 	virtual ~GeneralGun(){
-		delete fRandomEngine; 
+		delete rng; 
 	};
   
 	/** public method ReadEvent **/
@@ -36,7 +36,7 @@ class GeneralGun : public FairGenerator{
 	int n_EVENTS;
   
  private:
-	Co3Rng *fRandomEngine;//!
+	TRandom3 *rng;//!
   
  protected:
  	string pdf_name;
