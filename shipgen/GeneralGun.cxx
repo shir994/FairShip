@@ -7,7 +7,7 @@
 #include "TROOT.h"
 #include <random>
 #include "FairPrimaryGenerator.h"
-#include "CosmicsGenerator.h"
+#include "GeneralGun.h"
 #include "TDatabasePDG.h"               // for TDatabasePDG
 #include "TMath.h"
 #include <boost/json/src.hpp>
