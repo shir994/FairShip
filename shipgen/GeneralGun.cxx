@@ -27,25 +27,26 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 
 	//Position
 	double cm = 1.;
+	double sigma = 1.*cm;
+	double range = 1.*cm;
+
+	double x_shift = 0.*cm;
+	double y_shift = 0.*cm;
+	double x_limit = 1.*cm;
+	double y_limit = 1.*cm;
+	
+	int sample_count = 0;
 	// pdf_name = GAUS;
 	switch(position_pdf){
 		case 0:
-			double sigma = 1.*cm;
 			x = rng->Gaus(0, sigma);//G4INCL::Random::gauss(sigma);
 			y = rng->Gaus(0, sigma);//G4INCL::Random::gauss(sigma);
 
 		case 1:
-			double range = 1.*cm;
 			x = rng->Uniform(-range, range);//(G4INCL::Random::shoot()-0.5) * range;
 			y = rng->Uniform(-range, range); //(G4INCL::Random::shoot()-0.5) * range;
 
 		case 2:
-			double sigma = 1*cm;
-			double x_shift = 0.*cm;
-			double y_shift = 0.*cm;
-			double x_limit = 1.*cm;
-			double y_limit = 1.*cm;
-			int sample_count = 0;
 
 			while (true){
 				x = rng->Gaus(x_shift, sigma); //G4INCL::Random::gauss(sigma) + x_shift;
@@ -68,7 +69,7 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 			py = 0. * GeV;
 			pz = 10. * GeV;
 	}
-	z = -400
+	z = -400.;
 	PID = 13;
 	TDatabasePDG* pdgBase = TDatabasePDG::Instance();
 	mass = pdgBase->GetParticle(PID)->Mass(); // muons!
