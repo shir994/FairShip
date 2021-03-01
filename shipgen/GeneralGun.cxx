@@ -27,6 +27,7 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 
 	//Position
 	double cm = 1.;
+	double GeV = 1.;
 	double sigma = 1.*cm;
 	double range = 1.*cm;
 
@@ -57,7 +58,7 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 					break;
 				}
 				sample_count++;
-				if sample_count > 50{
+				if (sample_count > 50){
 					cout<<"Check your config, too many resamples";
 					sample_count = 0;
 				}
