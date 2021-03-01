@@ -16,8 +16,7 @@
 using namespace std;
 
 Bool_t GeneralGun::Init(string mOption){
-	position_pdf = 0;
-	momentum_pdf = 0;
+
 	rng  = new TRandom3(gRandom->GetSeed());
 	// fNevents; = 0;
 	return kTRUE;
@@ -25,6 +24,8 @@ Bool_t GeneralGun::Init(string mOption){
 // -----   Passing the event   -----------------------------------------
 Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 
+	position_pdf = 0;
+	momentum_pdf = 0;
 	PID = 13;
 	//Position
 	double cm = 1.;
