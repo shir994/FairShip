@@ -14,9 +14,11 @@
 #include <G4INCLRandom.hh>
 
 using namespace std;
+GeneralGun::GeneralGun() {}
 
 Bool_t GeneralGun::Init(string mOption){
 	pdf_name = 'simple_gauss';
+	n_EVENTS = 0;
 	return kTRUE;
 }
 // -----   Passing the event   -----------------------------------------
@@ -72,8 +74,13 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 
 	P = TMath::Sqrt(px*px + py*py + pz*pz);
 	cpg->AddTrack(PID,px,py,pz,x,y,z,-1,true,TMath::Sqrt(P*P+mass*mass),0,weight);  // -1 = Mother ID, true = tracking, SQRT(x) = Energy, 0 = t
+	n_EVENTS++;
 	return kTRUE;
 }
 // ---------------------------------------------------------------------
+Int_t GeneralGun::GetNevents()
+{
+ return n_EVENTS;
+}
 
 ClassImp(GeneralGun)
