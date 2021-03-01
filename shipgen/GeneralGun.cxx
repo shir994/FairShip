@@ -34,8 +34,9 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 	double y_shift = 0.*cm;
 	double x_limit = 1.*cm;
 	double y_limit = 1.*cm;
-	
+
 	int sample_count = 0;
+	bool success_flag = false;
 	// pdf_name = GAUS;
 	switch(position_pdf){
 		case 0:
@@ -55,7 +56,7 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 					success_flag = true;
 					break;
 				}
-				sample_count++
+				sample_count++;
 				if sample_count > 50{
 					cout<<"Check your config, too many resamples";
 					sample_count = 0;
