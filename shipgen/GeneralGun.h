@@ -20,6 +20,7 @@ class FairPrimaryGenerator;
 
 class GeneralGun : public FairGenerator{
  public:
+
   	/** constructor,destructor **/
 	GeneralGun(){};  
 	virtual ~GeneralGun(){
@@ -39,7 +40,9 @@ class GeneralGun : public FairGenerator{
 	TRandom3 *rng;//!
   
  protected:
- 	string pdf_name;
+
+ 	int position_pdf;
+ 	int momentum_pdf;
 	double P,px,py,pz,x,y,z,weighttest, weight, mass, theta;
 	int PID;//!
 	

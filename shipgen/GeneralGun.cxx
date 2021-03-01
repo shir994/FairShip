@@ -14,10 +14,10 @@
 // #include <G4INCLRandom.hh>
 
 using namespace std;
-GeneralGun::GeneralGun() {}
 
 Bool_t GeneralGun::Init(string mOption){
-	pdf_name = 'simple_gauss';
+	position_pdf = 0;
+	momentum_pdf = 0;
 	rng  = new TRandom3(gRandom->GetSeed());
 	n_EVENTS = 0;
 	return kTRUE;
@@ -26,19 +26,20 @@ Bool_t GeneralGun::Init(string mOption){
 Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 
 	//Position
-
-	switch(pdf_name){
-		case "simple_gauss":
+	double cm = 1.;
+	// pdf_name = GAUS;
+	switch(position_pdf){
+		case 0:
 			double sigma = 1.*cm;
 			x = rng->Gaus(0, sigma);//G4INCL::Random::gauss(sigma);
 			y = rng->Gaus(0, sigma);//G4INCL::Random::gauss(sigma);
 
-		case "flat":
+		case 1:
 			double range = 1.*cm;
 			x = rng->Uniform(-range, range);//(G4INCL::Random::shoot()-0.5) * range;
 			y = rng->Uniform(-range, range); //(G4INCL::Random::shoot()-0.5) * range;
 
-		case "shifted_gauss":
+		case 2:
 			double sigma = 1*cm;
 			double x_shift = 0.*cm;
 			double y_shift = 0.*cm;
@@ -61,8 +62,8 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 			}
 	}
 	//Energy
-	switch (energy_distr){
-		case "simple":
+	switch (momentum_pdf){
+		case 0:
 			px = 0. * GeV;
 			py = 0. * GeV;
 			pz = 10. * GeV;
