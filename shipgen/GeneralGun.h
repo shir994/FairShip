@@ -34,7 +34,7 @@ class GeneralGun : public FairGenerator{
 	Int_t GetNevents();
 	
 	double z0, yBox,xBox,zBox,xdist, zdist, minE;
-	int n_EVENTS;
+	int fNevents;
   
  private:
 	TRandom3 *rng;//!

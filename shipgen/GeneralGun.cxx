@@ -19,12 +19,13 @@ Bool_t GeneralGun::Init(string mOption){
 	position_pdf = 0;
 	momentum_pdf = 0;
 	rng  = new TRandom3(gRandom->GetSeed());
-	n_EVENTS = 0;
+	// fNevents; = 0;
 	return kTRUE;
 }
 // -----   Passing the event   -----------------------------------------
 Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 
+	PID = 13;
 	//Position
 	double cm = 1.;
 	double GeV = 1.;
@@ -72,20 +73,20 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 			pz = 10. * GeV;
 	}
 	z = -400.;
-	PID = 13;
 	TDatabasePDG* pdgBase = TDatabasePDG::Instance();
-	mass = pdgBase->GetParticle(PID)->Mass(); // muons!
-	weight = 1;
+	mass = pdgBase->GetParticle(PID)->Mass(); // GeV
+	weight = 1.;
 
 	P = TMath::Sqrt(px*px + py*py + pz*pz);
-	cpg->AddTrack(PID,px,py,pz,x,y,z,-1,true,TMath::Sqrt(P*P+mass*mass),0,weight);  // -1 = Mother ID, true = tracking, SQRT(x) = Energy, 0 = t
-	n_EVENTS++;
+	cout<<px<<"	"<<py<<"	"<<pz<<"	"<<x<<"	"<<y<<"	"<<z<<"	"<<endl;
+	cpg->AddTrack(PID, px,py,pz, x,y,z, -1, true, TMath::Sqrt(P*P+mass*mass), 0, weight);  // -1 = Mother ID, true = tracking, SQRT(x) = Energy, 0 = t
+	fNevents++;
 	return kTRUE;
 }
 // ---------------------------------------------------------------------
 Int_t GeneralGun::GetNevents()
 {
- return n_EVENTS;
+ return fNevents;
 }
 
 ClassImp(GeneralGun)
