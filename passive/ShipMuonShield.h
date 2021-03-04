@@ -26,6 +26,12 @@ class ShipMuonShield : public FairModule
                                const Int_t withCoMagnet=0, const Bool_t StepGeo=false,
                                const Bool_t WithConstAbsorberField=true, const Bool_t WithConstShieldField=true);
 
+   ShipMuonShield(TString params, const char* name, const Int_t Design=1,  const char* Title="ShipMiniShield",
+                               Double_t Z=0, Double_t L0=0, Double_t L1=0, Double_t L2=0, Double_t L3=0, Double_t L4=0, Double_t L5=0, Double_t L6=0, 
+                               Double_t L7=0, Double_t L8=0,Double_t gap=0,Double_t LE=0,Double_t y=400, Double_t floor=500, Double_t field=1.7, 
+                               const Int_t withCoMagnet=0, const Bool_t StepGeo=false,
+                               const Bool_t WithConstAbsorberField=true, const Bool_t WithConstShieldField=true);
+
    ShipMuonShield(Double_t Z, TString geofile, const Int_t withCoMagnet=0, const Bool_t StepGeo=false,
    const Bool_t WithConstAbsorberField=true, const Bool_t WithConstShieldField=true);
    ShipMuonShield();
@@ -49,6 +55,7 @@ class ShipMuonShield : public FairModule
     
  protected:
   
+  TString optParams = "";
   Int_t  fDesign;       // design of muon shield, 1=passive, active = ...
   TString fGeofile;
   Double_t  fMuonShieldLength,fY,fField;
@@ -96,6 +103,17 @@ class ShipMuonShield : public FairModule
 		  std::vector<Double_t> &HmainSideMagOut,
 		  std::vector<Double_t> &gapIn, std::vector<Double_t> &gapOut,
 		  std::vector<Double_t> &Z);
+
+  Int_t mini_Initialize(std::vector<TString> &magnetName,
+      std::vector<FieldDirection> &fieldDirection,
+      std::vector<Double_t> &dXIn, std::vector<Double_t> &dYIn,
+      std::vector<Double_t> &dXOut, std::vector<Double_t> &dYOut,
+      std::vector<Double_t> &dZ, std::vector<Double_t> &midGapIn,
+      std::vector<Double_t> &midGapOut,
+      std::vector<Double_t> &HmainSideMagIn,
+      std::vector<Double_t> &HmainSideMagOut,
+      std::vector<Double_t> &gapIn, std::vector<Double_t> &gapOut,
+      std::vector<Double_t> &Z);
 
   void CreateMagnet(TString magnetName, TGeoMedium *medium, TGeoVolume *tShield,
 		    TGeoUniformMagField *fields[4],

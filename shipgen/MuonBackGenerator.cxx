@@ -23,10 +23,10 @@ MuonBackGenerator::MuonBackGenerator() {
 // -------------------------------------------------------------------------
 // -----   Default constructor   -------------------------------------------
 Bool_t MuonBackGenerator::Init(const char* fileName) {
-  return Init(fileName, 0, false);
+  return Init(fileName, 0, 1., false);
 }
 // -----   Default constructor   -------------------------------------------
-Bool_t MuonBackGenerator::Init(const char* fileName, const int firstEvent, const Bool_t fl = false ) {
+Bool_t MuonBackGenerator::Init(const char* fileName, const int firstEvent, const Double_t mfactor, const Bool_t fl = false ) {
   fLogger = FairLogger::GetLogger();
   fLogger->Info(MESSAGE_ORIGIN,"Opening input file %s",fileName);
   if (0 == strncmp("/eos",fileName,4) ) {
@@ -39,6 +39,7 @@ Bool_t MuonBackGenerator::Init(const char* fileName, const int firstEvent, const
   if (fInputFile->IsZombie()) {
     fLogger->Fatal(MESSAGE_ORIGIN, "Error opening the Signal file:",fInputFile);
   }
+  factor = mfactor;
   fn = firstEvent;
   fPhiRandomize = fl;
   fSameSeed = 0;
@@ -211,6 +212,12 @@ Bool_t MuonBackGenerator::ReadEvent(FairPrimaryGenerator* cpg)
           }
           break;
         }
+       }
+       if (abspid == 13){
+        px = px * factor;
+        py = py * factor;
+        pz = pz * factor;
+        e = TMath::Sqrt(px*px + py*py + px*pz +(track->GetMass())*(track->GetMass()));
        }
        cpg->AddTrack(track->GetPdgCode(),px,py,pz,vx,vy,vz,track->GetMotherId(),wanttracking,e,tof,track->GetWeight(),(TMCProcess)track->GetProcID());
      }
