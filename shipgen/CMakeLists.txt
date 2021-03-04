@@ -46,6 +46,7 @@ CosmicsGenerator.cxx
 MuDISGenerator.cxx
 FixedTargetGenerator.cxx
 ALPACAGenerator.cxx
+GeneralGun.cxx
 )
 
 set(LINKDEF GenLinkDef.h)

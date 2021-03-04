@@ -19,6 +19,10 @@ import charmDet_conf as shipDet_conf
 import geomGeant4
 import saveBasicParameters
 
+from collections import defaultdict
+import numpy as np
+import json
+
 parser = ArgumentParser()
 group = parser.add_mutually_exclusive_group()
 
@@ -49,6 +53,10 @@ parser.add_argument("--coMuonShield", dest="muShieldWithCobaltMagnet",
 parser.add_argument("--muShieldDesign", dest="ds", help="5=TP muon shield, 6=magnetized hadron, 7=short magnet design, 9=optimised with T4 as constraint, 8=requires config file\
                                             ,10=with field map for hadron absorber", required=False,
                     default=9, type=int)
+parser.add_argument("--optParams", dest='optParams', required=False, default=False)
+parser.add_argument("--processMiniShield", dest='processMiniShield', action="store_true", required=False)
+parser.add_argument("--zoneSize", dest='zone', required=False, default=0, type=int)
+parser.add_argument("--energyScaleFactor", dest='energyScaleFactor', default=1, required=False, type=float)
 
 options = parser.parse_args()
 
@@ -67,6 +75,7 @@ ship_geo = ConfigRegistry.loadpy("$FAIRSHIP/geometry/charm-geometry_config.py",
                                  muShieldGeo=options.geofile,
                                  muShieldStepGeo=options.muShieldStepGeo,
                                  muShieldWithCobaltMagnet=options.muShieldWithCobaltMagnet)
+ship_geo.optParams = options.optParams
 
 if not os.path.exists(options.outputDir):
     os.makedirs(options.outputDir)
@@ -90,7 +99,7 @@ else:
     primGen.SetTarget(ship_geo.target.z0 + 50 * u.m, 0.)
 
 MuonBackgen = r.MuonBackGenerator()
-MuonBackgen.Init(options.inputFile, options.firstEvent,options.phiRandom)
+MuonBackgen.Init(options.inputFile, options.firstEvent, options.energyScaleFactor, options.phiRandom)
 if options.sameSeed:
     MuonBackgen.SetSameSeed(options.sameSeed)
 primGen.AddGenerator(MuonBackgen)
@@ -128,6 +137,101 @@ print('Finished simulation of {} events.'.format(n_events))
 run.CreateGeometryFile("%s/geofile_full.%s.root" % (options.outputDir, tag))
 # save ShipGeo dictionary in geofile
 saveBasicParameters.execute("%s/geofile_full.%s.root" % (options.outputDir, tag),ship_geo)
+
+if options.processMiniShield:
+    m = 0.
+    lGeo = r.gGeoManager
+    miniShield = lGeo.GetVolume('MuonShieldArea')
+    nodes = miniShield.GetNodes()
+    for node in nodes:
+      volume = node.GetVolume()
+      if 'mini' in volume.GetName():
+        m += volume.Weight(0.01, 'a')
+
+    def check_acceptance(hit, bound=(330, 530)):
+        """
+        :param hit:
+        :param bound: acceptance bounds (X,Y) in cm
+        :return:
+        """
+        return abs(hit.GetX()) <= bound[0] and abs(hit.GetY()) <= bound[1]
+
+    def process_file(filename,  muons_output_name = "muons_output", epsilon=1e-9, debug=True,
+                     apply_acceptance_cut=False, acceptance_size=(330, 530)):
+        directory = os.path.dirname(os.path.abspath(filename))
+        file = r.TFile(filename)
+
+        tree = file.Get("cbmsim")
+        print("Total events:{}".format(tree.GetEntries()))
+
+        MUON = 13
+        muons_stats = []
+        events_with_more_than_two_hits_per_mc = 0
+        empty_hits = "Not implemented"
+
+        for index, event in enumerate(tree):
+            if index % 5000 == 0:
+                print("N events processed: {}".format(index))
+            mc_pdgs = []
+
+            for hit in event.MCTrack:
+                mc_pdgs.append(hit.GetPdgCode())
+
+            muon_veto_points = defaultdict(list)
+            for hit in event.vetoPoint:
+                if hit.GetTrackID() >= 0 and\
+                   abs(mc_pdgs[hit.GetTrackID()]):
+                    if apply_acceptance_cut:
+                        if check_acceptance(hit, bound=acceptance_size):
+                            # Middle or inital stats??
+                            pos_begin = r.TVector3()
+                            hit.Position(pos_begin)
+                            # Extracting only XY coordinates
+                            muon_veto_points[hit.GetTrackID()].append([pos_begin.X(), pos_begin.Y()])
+                    else:
+                        pos_begin = r.TVector3()
+                        hit.Position(pos_begin)
+                        # Extracting only XY coordinates
+                        muon_veto_points[hit.GetTrackID()].append([pos_begin.X(), pos_begin.Y()])
+
+            for index, hit in enumerate(event.MCTrack):
+                if index in muon_veto_points:
+                    if debug:
+                        print("PDG: {}, mID: {}".format(hit.GetPdgCode(), hit.GetMotherId()))
+                        assert abs(hit.GetPdgCode()) == MUON
+                    muon = [
+                        hit.GetPx(),
+                        hit.GetPy(),
+                        hit.GetPz(),
+                        hit.GetStartX(),
+                        hit.GetStartY(),
+                        hit.GetStartZ(),
+                        hit.GetPdgCode(),
+                        hit.GetWeight()
+                    ]
+                    if True:#abs(muon[-2]) == 13:
+                      muons_stats.append(muon)
+                    if len(muon_veto_points[index]) > 1:
+                        events_with_more_than_two_hits_per_mc += 1
+                        continue
+
+        print("events_with_more_than_two_hits_per_mc: {}".format(events_with_more_than_two_hits_per_mc))
+        print("Stopped muons: {}".format(empty_hits))
+        print("Total events returned: {}".format(len(muons_stats)))
+        return np.array(muons_stats)
+
+    muons_stats = process_file(os.path.join(options.outputDir,"ship.MiniShield.MuonBack.root"), apply_acceptance_cut=True, debug=False, acceptance_size=(options.zone, options.zone))
+    if len(muons_stats) == 0:
+          muon_kinematics = np.array([])
+    else:
+          muon_kinematics = muons_stats
+    returned_params = {
+          "w": m,
+          "params": [float(str.strip(par))for par in options.optParams.split(',')],
+          "kinematics": muon_kinematics.tolist()
+      }
+    with open(os.path.join(options.outputDir, "optimise_input.json"), "w") as f:
+          json.dump(returned_params, f)
 
 # tmpFile = outFile+"tmp"
 # xxx = outFile.split('/')

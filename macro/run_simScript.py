@@ -59,6 +59,7 @@ group = parser.add_mutually_exclusive_group()
 parser.add_argument("--Pythia6", dest="pythia6", help="Use Pythia6", required=False, action="store_true")
 parser.add_argument("--Pythia8", dest="pythia8", help="Use Pythia8", required=False, action="store_true")
 parser.add_argument("--PG",      dest="pg",      help="Use Particle Gun", required=False, action="store_true")
+parser.add_argument("--GPG",      dest="gpg",      help="Use General Particle Gun", required=False, action="store_true")
 parser.add_argument("--pID",     dest="pID",     help="id of particle used by the gun (default=22)", required=False, default=22, type=int)
 parser.add_argument("--Estart",  dest="Estart",  help="start of energy range of particle gun for muflux detector (default=10 GeV)", required=False, default=10, type=float)
 parser.add_argument("--Eend",    dest="Eend",    help="end of energy range of particle gun for muflux detector (default=10 GeV)", required=False, default=10, type=float)
@@ -116,7 +117,7 @@ parser.add_argument("--coMuonShield", dest="muShieldWithCobaltMagnet", help="rep
 parser.add_argument("--MesonMother",   dest="MM",  help="Choose DP production meson source", required=False,  default=True)
 
 options = parser.parse_args()
-
+if options.gpg:  simEngine = "GPG"
 if options.pythia6:  simEngine = "Pythia6"
 if options.pythia8:  simEngine = "Pythia8"
 if options.pg:       simEngine = "PG"
@@ -353,6 +354,11 @@ if simEngine == "PG":
      primGen.SetTarget(ship_geo.target.z0,0.)
   else:  
      myPgun.SetThetaRange(0,0) # // Polar angle in lab system range [degree]
+  primGen.AddGenerator(myPgun)
+  # -----General Particle Gun-----------------------
+if simEngine == "GPG": 
+  myPgun = ROOT.GeneralGun()
+  myPgun.Init()
   primGen.AddGenerator(myPgun)
 # -----muon DIS Background------------------------
 if simEngine == "muonDIS":

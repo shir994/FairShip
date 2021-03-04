@@ -4,6 +4,7 @@ import ROOT
 # the following params should be passed through 'ConfigRegistry.loadpy' method
 # none for the moment
 with ConfigRegistry.register_config("basic") as c:
+    c.optParams = ""
     
     if "targetOpt" not in globals():
        targetOpt = 18 # add extra 20cm of tungsten as per 13/06/2017
