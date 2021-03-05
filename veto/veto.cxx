@@ -1243,9 +1243,15 @@ void veto::ConstructGeometry()
 //     InitMedium("vacuum");
 //     TGeoMedium* dummy = gGeoManager->GetMedium("vacuum");
 
-     TGeoVolume* after_shield = gGeoManager->MakeBox("sensitive_plane", Sens, 1*m, 1*m, 1*cm);
+     TGeoVolume* goliath_sens = gGeoManager->MakeBox("sensitive_plane", Sens, 1*m, 1*m, 1*cm);
+     goliath_sens->SetLineColor(kBlue);
+     top->AddNode(goliath_sens, 0, new TGeoTranslation(0, 0, sens_z_1));
+     top->AddNode(goliath_sens, 1, new TGeoTranslation(0, 0, sens_z_2));
+     AddSensitiveVolume(goliath_sens);
+
+     TGeoVolume* after_shield = gGeoManager->MakeBox("sensitive_plane_magnet", Sens, 1*m, 1*m, 1*cm);
      after_shield->SetLineColor(kRed);
-     top->AddNode(after_shield, 0, new TGeoTranslation(0, 0, sens_z));
+     top->AddNode(after_shield, 0, new TGeoTranslation(0, 0, sens_z_3));
      AddSensitiveVolume(after_shield);
 
 // only for fastMuon simulation, otherwise output becomes too big

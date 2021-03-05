@@ -94,8 +94,10 @@ class veto: public FairDetector
     inline void SetLiquidVeto(Int_t liquid=1) {fLiquidVeto=liquid;}
     inline Int_t GetLiquidVeto() const {return fLiquidVeto;}
 
-    inline void SetSensePlaneZ(Float_t _sens_z) {
-        sens_z = _sens_z;
+    inline void SetSensePlaneZ(Float_t _sens_z_1, Float_t _sens_z_2, Float_t _sens_z_3) {
+        sens_z_1 = _sens_z_1;
+        sens_z_2 = _sens_z_2;
+        sens_z_3 = _sens_z_3;
     }
 
   private:
@@ -158,7 +160,7 @@ class veto: public FairDetector
     /** container for data points */
     TClonesArray*  fvetoPointCollection;
 
-    Float_t sens_z;
+    Float_t sens_z_1, sens_z_2, sens_z_3;
 
     veto(const veto&);
     veto& operator=(const veto&);

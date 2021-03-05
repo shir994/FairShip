@@ -5,9 +5,6 @@ import ROOT
 # none for the moment
 with ConfigRegistry.register_config("basic") as c:
     c.optParams = ""
-    
-    if "targetOpt" not in globals():
-       targetOpt = 18 # add extra 20cm of tungsten as per 13/06/2017
 
     if "muShieldStepGeo" not in globals():
         muShieldStepGeo = False
@@ -18,88 +15,38 @@ with ConfigRegistry.register_config("basic") as c:
     if "muShieldGeo" not in globals():
         muShieldGeo = None
 
-    c.target = AttrDict(z0=0*u.cm)
-     
-    c.MufluxTargetStation=AttrDict(z0=0* u.cm)
-    c.MufluxTargetStation.absorber_x=120 *u.cm
-    c.MufluxTargetStation.absorber_y=97.5*u.cm
-    c.MufluxTargetStation.absorbercutout_x=102* u.cm
-    c.MufluxTargetStation.absorbercutout_y=27.5*u.cm
-    c.MufluxTargetStation.ironshield_x=20.*u.cm
-    c.MufluxTargetStation.ironshield_y=82.5*u.cm
-    c.MufluxTargetStation.ironshield_z=160*u.cm
-    c.MufluxTargetStation.concreteshield_x=40*u.cm
-    c.MufluxTargetStation.concreteshield_y=82.5*u.cm
-    c.MufluxTargetStation.concreteshield_z=160.*u.cm
-    c.MufluxTargetStation.abovetargetshield_x=120*u.cm
-    c.MufluxTargetStation.abovetargetshield_y=42.5*u.cm
-    c.MufluxTargetStation.abovetargetshield_z=160*u.cm
-    c.MufluxTargetStation.aboveabsorbershield_x=120*u.cm
-    c.MufluxTargetStation.aboveabsorbershield_y=40*u.cm
-    c.MufluxTargetStation.aboveabsorbershield_z=80*u.cm
-    c.MufluxTargetStation.aboveabovetargetshield_y=40*u.cm
-    c.MufluxTargetStation.floor_x=500.*u.cm
-    c.MufluxTargetStation.floor_y=80.*u.cm
-    c.MufluxTargetStation.floor_z=800.*u.cm
 
     # target absorber muon shield setup, decayVolume.length = nominal EOI length, only kept to define z=0
     c.decayVolume            =  AttrDict(z=0*u.cm)
     c.decayVolume.length     =   50*u.m
 
-    c.hadronAbsorber              =  AttrDict(z=0*u.cm)
-    c.hadronAbsorber.length =  2.4*u.m
-    c.hadronAbsorber.z     =   - c.hadronAbsorber.length/2.
 
-    # Target
-    c.target               =  AttrDict(z=0*u.cm)
-    c.targetOpt            = targetOpt
+    c.Goliath = AttrDict(z=0 * u.cm)
+    # Spectrometer
+    # Parameters for Goliath by Annarita
+    c.Goliath.LS = 4.5 * u.m
+    c.Goliath.TS = 3.6 * u.m
+    # c.Spectrometer.CoilR = 1.*u.m
+    c.Goliath.CoilR = 1.6458 * u.m
+    c.Goliath.UpCoilH = 45 * u.cm
+    c.Goliath.LowCoilH = 30 * u.cm
+    # c.Spectrometer.CoilD = 105*u.cm
+    c.Goliath.CoilD = 103.5575 * u.cm
+    # c.Spectrometer.BasisH = 57*u.cm
+    c.Goliath.BasisH = 50.22125 * u.cm
+    c.Goliath.H = 2 * c.Goliath.BasisH + c.Goliath.CoilD + c.Goliath.UpCoilH + c.Goliath.LowCoilH
+    # c.Spectrometer.DX = 2. * u.m
+    # c.Spectrometer.DY = 1.6 * u.m
+    # c.Spectrometer.DZ = 16. * u.cm
 
-    c.target.M1 = "molybdenummisis"
-    c.target.L1 = 8.52*u.cm
-    c.target.M2 = "molybdenummisis"
-    c.target.L2 = 2.8*u.cm
-    c.target.M3 = "molybdenummisis"
-    c.target.L3 = 2.8*u.cm
-    c.target.M4 = "molybdenummisis"
-    c.target.L4 = 2.8*u.cm
-    c.target.M5 = "molybdenummisis"
-    c.target.L5 = 2.8*u.cm
-    c.target.M6 = "molybdenummisis"
-    c.target.L6 = 2.8*u.cm
-    c.target.M7 = "molybdenummisis"
-    c.target.L7 = 2.8*u.cm
-    c.target.M8 = "molybdenummisis"
-    c.target.L8 = 2.8*u.cm
-    c.target.M9 = "molybdenummisis"
-    c.target.L9 = 5.4*u.cm
-    c.target.M10 = "molybdenummisis"
-    c.target.L10 = 5.4*u.cm
-    c.target.M11 = "molybdenummisis"
-    c.target.L11 = 6.96*u.cm
-    c.target.M12 = "molybdenummisis"
-    c.target.L12 = 8.52*u.cm
-    c.target.M13 = "molybdenummisis"
-    c.target.L13 = 8.52*u.cm
-    c.target.M14 = "tungstenmisis"
-    c.target.L14 = 5.17*u.cm
-    c.target.M15 = "tungstenmisis"
-    c.target.L15 = 8.3*u.cm
-    c.target.M16 = "tungstenmisis"
-    c.target.L16 = 10.39*u.cm
-    c.target.M17 = "tungstenmisis"
-    c.target.L17 = 20.82*u.cm
-    c.target.M18 = "tungstenmisis"
-    c.target.L18 = 36.47*u.cm
-    c.target.sl  =  0.54459*u.cm  # H20 slit *17 times; to get to the measured length by survey 
-    c.target.xy  = 10.*u.cm   # new diameter of muflux target    
-    
-    # 5.0 cm is for front and endcaps
-    
-    c.target.length = 154.328*u.cm   #from survey 
-    # interaction point, start of target
-    
-    c.target.z   =  c.hadronAbsorber.z - c.hadronAbsorber.length/2. - c.target.length/2.
-    c.target.z0  =  c.target.z - c.target.length/2.
+
+    c.Goliath.goliathcentre_to_beam = 17.32*u.cm + (c.Goliath.UpCoilH-c.Goliath.LowCoilH)/2.
+    c.Goliath.goliathcentre = 0*u.cm #351.19*u.cm
+
+
+    # c.MufluxSpectrometer.DX = 2.*u.m
+    # c.MufluxSpectrometer.DY = 1.6*u.m
+    # c.MufluxSpectrometer.DZ = 11.72*u.cm
 
     #### MUON SHIELD
     c.muShield = AttrDict(z=0 * u.cm)
@@ -166,10 +113,17 @@ with ConfigRegistry.register_config("basic") as c:
                 c.muShield.dZ5 + c.muShield.dZ6 +
                 c.muShield.dZ7 + c.muShield.dZ8
         ) + c.muShield.LE
-        c.muShield.z = c.hadronAbsorber.z + c.hadronAbsorber.length / 2 + c.muShield.length / 2 + 0 * u.m
-        c.SensPlane = AttrDict(z=0 * u.cm)
-        c.SensPlane.z = c.hadronAbsorber.z + c.hadronAbsorber.length / 2 + 6 * u.m
 
+
+    c.SensPlane = AttrDict(z=0 * u.cm)
+    c.SensPlane.z_1 = c.Goliath.goliathcentre - c.Goliath.LS / 2 - 1 * u.m
+    c.SensPlane.z_2 = c.Goliath.goliathcentre + c.Goliath.LS / 2 + 1 * u.m
+
+    c.muShield.z = c.SensPlane.z_2 + 1*u.m + c.muShield.length / 2
+    c.SensPlane.z_3 = c.muShield.z + 1*u.m + c.muShield.length / 2
+
+
+    c.hadronAbsorber = AttrDict(z=0 * u.cm)
     c.hadronAbsorber.WithConstField = True
     c.muShield.WithConstField = True
 
@@ -177,7 +131,6 @@ with ConfigRegistry.register_config("basic") as c:
     c.cave = AttrDict(z=0 * u.cm)
     c.cave.floorHeightMuonShield = 0 * u.m
     c.Yheight = 0 * u.m
-
 
 
 

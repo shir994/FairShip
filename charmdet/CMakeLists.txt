@@ -50,6 +50,7 @@ ReProcessAbsorber.cxx
 RPCTrack.cxx
 MufluxReco.cxx
 MillepedeCaller.cxx
+GoliathMagnet.cxx
 )
 
 Set(HEADERS )
