@@ -63,7 +63,7 @@ def configure(run,ship_geo,Gfield=''):
                                    ship_geo.hadronAbsorber.WithConstField,
                                    ship_geo.muShield.WithConstField)
    elif ship_geo.muShieldDesign == 20:
-    MuonShield = ROOT.ShipMuonShield("MuonShield", ship_geo.muShieldDesign, "ShipMuonShield", ship_geo.muShield.Start_Z, ship_geo.muShield.Z, ship_geo.muShield.H1, ship_geo.muShield.Field, hip_geo.muShield.Gap)
+    MuonShield = ROOT.ShipMuonShield("MuonShield", ship_geo.muShieldDesign, "ShipMuonShield", ship_geo.muShield.Start_Z, ship_geo.muShield.Z, ship_geo.muShield.H1, ship_geo.muShield.Field, ship_geo.muShield.Gap)
 
    detectorList.append(MuonShield)
 

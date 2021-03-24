@@ -24,8 +24,8 @@ Double_t kilogauss = 1.;
 Double_t tesla = 10 * kilogauss;
 
 ShipMuonShield::~ShipMuonShield() {}
-ShipMuonShield::ShipMuonShield(const char* name, const Int_t Design=20,  const char* Title="ShipMuonShield",
-                               Double_t Start_Z=0, Double_t Z=0, Double_t H1=0, Double_t field=1.7, Double_t mgap=0){
+ShipMuonShield::ShipMuonShield(const char* name, const Int_t Design,  const char* Title,
+                               Double_t Start_Z, Double_t Z, Double_t H1, Double_t field, Double_t mgap){
   fDesign = Design;
   fField  = field;
   dZ0 = Start_Z;
@@ -547,8 +547,8 @@ Int_t ShipMuonShield::Initialize(std::vector<TString> &magnetName,
 				std::vector<Double_t> &gapIn, std::vector<Double_t> &gapOut,
 				std::vector<Double_t> &Z) {
 
-  const Int_t nMagnets = (fDesign >= 7) ? 9 : 8;
-  if fDesign==20{
+  Int_t nMagnets = (fDesign >= 7) ? 9 : 8;
+  if (fDesign==20){
     nMagnets=4;
   }
   magnetName.reserve(nMagnets);
@@ -962,7 +962,7 @@ void ShipMuonShield::ConstructGeometry()
         std::vector<TString> magnetName;
         std::vector<Double_t> dXIn, dYIn, dXOut, dYOut, dZf, midGapIn, midGapOut, HmainSideMagIn, HmainSideMagOut, gapIn, gapOut, Z;
         const Int_t nParts = Initialize(magnetName, fieldDirection, dXIn, dYIn, dXOut, dYOut, dZf, midGapIn, midGapOut, HmainSideMagIn, HmainSideMagOut, gapIn, gapOut, Z);
-        
+
         for (unsigned int i = 0; i<nParts; i++){
           CreateMagnet(magnetName[i], steel, tShield, fields,fieldDirection[i],
            dXIn[i],dYIn[i],dXOut[i],dYOut[i],dZf[i],
