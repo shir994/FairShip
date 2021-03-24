@@ -95,7 +95,7 @@ class veto: public FairDetector
     inline Int_t GetLiquidVeto() const {return fLiquidVeto;}
 
     inline void SetSensePlaneZ(std::vector<double> zPlane) {
-        sens_z = zPlane
+        sens_z = zPlane;
     }
 
   private:
@@ -158,7 +158,7 @@ class veto: public FairDetector
     /** container for data points */
     TClonesArray*  fvetoPointCollection;
 
-    std::vector<Double> sens_z;
+    std::vector<double> sens_z;
 
     veto(const veto&);
     veto& operator=(const veto&);
