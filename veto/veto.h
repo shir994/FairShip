@@ -7,6 +7,9 @@
 #include "TGeoVolume.h"
 
 #include <map>
+#include <boost/python/module.hpp>
+#include <boost/python/class.hpp>
+#include <boost/python/scope.hpp>
 
 class vetoPoint;
 class FairVolume;
