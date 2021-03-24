@@ -62,7 +62,7 @@ parser.add_argument("--MuonBack",dest="muonback",  help="Generate events from mu
 
 options = parser.parse_args()
 if options.gpg:  simEngine = "GPG"
-if options.muonback: simEngine = "MuonBack"
+elif options.muonback: simEngine = "MuonBack"
 else: simEngine="MuonBack"
 
 if options.muShieldWithCobaltMagnet and options.ds < 3:
@@ -116,9 +116,10 @@ if simEngine=="MuonBack":
     print('Process ', options.nEvents, ' from input file, with Phi random=', options.phiRandom)
 
 if simEngine == "GPG": 
-  myPgun = ROOT.GeneralGun()
+  myPgun = r.GeneralGun()
   myPgun.Init(ship_geo.Beam.z)
   primGen.AddGenerator(myPgun)
+  n_events = options.nEvents
 
 if options.followMuon:
     options.fastMuon = True
@@ -138,9 +139,9 @@ print('Initialised run.')
 
 fieldMaker = geomGeant4.addVMCFields(ship_geo, '', True)
 
-fieldMaker.plotField(1, r.TVector3(-300.0, 600.0, 10.0), r.TVector3(-300.0, 300.0, 6.0),
+fieldMaker.plotField(1, r.TVector3(-300.0, 1600.0, 10.0), r.TVector3(-300.0, 300.0, 6.0),
                      os.path.join(options.outputDir, 'Bzx.png'))
-fieldMaker.plotField(2, r.TVector3(-300.0, 600.0, 10.0), r.TVector3(-400.0, 400.0, 6.0),
+fieldMaker.plotField(2, r.TVector3(-300.0, 1600.0, 10.0), r.TVector3(-400.0, 400.0, 6.0),
                      os.path.join(options.outputDir, 'Bzy.png'))
 print('Start run of {} events.'.format(n_events))
 run.Run(n_events)

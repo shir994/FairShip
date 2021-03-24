@@ -11,7 +11,7 @@ with ConfigRegistry.register_config("basic") as c:
     if "muShieldWithCobaltMagnet" not in globals():
         muShieldWithCobaltMagnet = 0
     if "muShieldDesign" not in globals():
-        muShieldDesign = 9
+        muShieldDesign = 20
     if "muShieldGeo" not in globals():
         muShieldGeo = None
 
@@ -45,7 +45,7 @@ with ConfigRegistry.register_config("basic") as c:
     c.Goliath.goliathcentre_to_beam = 17.32*u.cm + (c.Goliath.UpCoilH-c.Goliath.LowCoilH)/2.
     c.Goliath.goliathcentre = 0*u.cm #351.19*u.cm
 
-    
+
     # c.MufluxSpectrometer.DX = 2.*u.m
     # c.MufluxSpectrometer.DY = 1.6*u.m
     # c.MufluxSpectrometer.DZ = 11.72*u.cm
@@ -107,6 +107,14 @@ with ConfigRegistry.register_config("basic") as c:
             c.muShield.half_Y_max = max(c.muShield.half_Y_max, h_l + f_l, h_r + f_r)
         c.muShield.half_X_max += 15 * u.cm
         c.muShield.half_Y_max += 15 * u.cm
+    elif muShieldDesign == 20:
+        c.muShield.Gap = 20.*u.cm
+        c.muShield.Field = 1.7  # Tesla
+        c.muShield.Start_Z = 300. * u.cm # + zGap
+        c.muShield.Z = 50. * u.cm
+        c.muShield.H1 = 150. * u.cm
+        c.muShield.length =  c.muShield.H1 * 4  + c.muShield.Gap * 3
+
 
     if muShieldDesign in range(7, 10):
         c.muShield.length = 2 * (
