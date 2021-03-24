@@ -69,9 +69,9 @@ def configure(run,ship_geo,Gfield=''):
 
  Veto = ROOT.veto("Veto", ROOT.kTRUE)  # vacuum tank
  if ship_geo.muShieldDesign == 20:
-  Veto.SetSensePlaneZ(ship_geo.SensPlane.z_1, ship_geo.SensPlane.z_2, ship_geo.muShield.Start_Z - 10*u.cm, ship_geo.muShield.Start_Z + ship_geo.muShield.Z + 10*u.cm, ship_geo.muShield.Start_Z + 2*ship_geo.muShield.Z + ship_geo.muShield.Gap + 10*u.cm, ship_geo.muShield.Start_Z + 3*ship_geo.muShield.Z + 2*ship_geo.muShield.Gap + 10*u.cm,  ship_geo.muShield.Start_Z + 4*ship_geo.muShield.Z + 3*ship_geo.muShield.Gap + 10*u.cm, ship_geo.muShield.Start_Z + 4*ship_geo.muShield.Z + 3*ship_geo.muShield.Gap + 110*u.cm)
+  Veto.SetSensePlaneZ([ship_geo.SensPlane.z_1, ship_geo.SensPlane.z_2, ship_geo.muShield.Start_Z - 10*u.cm, ship_geo.muShield.Start_Z + ship_geo.muShield.Z + 10*u.cm, ship_geo.muShield.Start_Z + 2*ship_geo.muShield.Z + ship_geo.muShield.Gap + 10*u.cm, ship_geo.muShield.Start_Z + 3*ship_geo.muShield.Z + 2*ship_geo.muShield.Gap + 10*u.cm,  ship_geo.muShield.Start_Z + 4*ship_geo.muShield.Z + 3*ship_geo.muShield.Gap + 10*u.cm, ship_geo.muShield.Start_Z + 4*ship_geo.muShield.Z + 3*ship_geo.muShield.Gap + 110*u.cm])
  else:
-  Veto.SetSensePlaneZ(ship_geo.SensPlane.z_1, ship_geo.SensPlane.z_2, ship_geo.SensPlane.z_3, ship_geo.SensPlane.z_4)
+  Veto.SetSensePlaneZ([ship_geo.SensPlane.z_1, ship_geo.SensPlane.z_2, ship_geo.SensPlane.z_3, ship_geo.SensPlane.z_4])
  detectorList.append(Veto)
 
  Goliath = ROOT.GoliathMagnet("Goliath")

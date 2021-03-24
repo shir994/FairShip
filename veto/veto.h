@@ -11,6 +11,7 @@
 class vetoPoint;
 class FairVolume;
 class TClonesArray;
+using namespace boost::python;
 
 class veto: public FairDetector
 {
@@ -95,7 +96,7 @@ class veto: public FairDetector
     inline Int_t GetLiquidVeto() const {return fLiquidVeto;}
 
     inline void SetSensePlaneZ(std::vector<double> zPlane) {
-        sens_z = zPlane;
+        sens_z = extract<std::vector<double>>(zPlane);
     }
 
   private:

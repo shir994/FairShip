@@ -1244,7 +1244,7 @@ void veto::ConstructGeometry()
 //     TGeoMedium* dummy = gGeoManager->GetMedium("vacuum");
 
     for (unsigned int i=0; i < sens_z.size(); i++){
-       TGeoVolume* goliath_sens = gGeoManager->MakeBox("sensitive_plane_"+std::to_string(i), Sens, 1*m, 1*m, 1*cm);
+       TGeoVolume* goliath_sens = gGeoManager->MakeBox(("sensitive_plane_"+std::to_string(i)).c_str(), Sens, 1*m, 1*m, 1*cm);
        goliath_sens->SetLineColor(kBlue);
        top->AddNode(goliath_sens, 0, new TGeoTranslation(0, 0, sens_z.at(i)));
        AddSensitiveVolume(goliath_sens);
