@@ -26,7 +26,7 @@ class ShipMuonShield : public FairModule
                                const Int_t withCoMagnet=0, const Bool_t StepGeo=false,
                                const Bool_t WithConstAbsorberField=true, const Bool_t WithConstShieldField=true);
 
-   ShipMuonShield(const char* name, const Int_t Design=20,  const char* Title="ShipMuonShield",
+   ShipMuonShield(const char* name, const double to_be_done,const Int_t Design=20,  const char* Title="ShipMuonShield",
                                Double_t Start_Z=0, Double_t Z=0, Double_t H1=0, Double_t field=1.7, Double_t mgap=0);
 
    ShipMuonShield(TString params, const char* name, const Int_t Design=1,  const char* Title="ShipMiniShield",

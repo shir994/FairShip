@@ -24,7 +24,7 @@ Double_t kilogauss = 1.;
 Double_t tesla = 10 * kilogauss;
 
 ShipMuonShield::~ShipMuonShield() {}
-ShipMuonShield::ShipMuonShield(const char* name, const Int_t Design,  const char* Title,
+ShipMuonShield::ShipMuonShield(const char* name, const double to_be_done, const Int_t Design,  const char* Title,
                                Double_t Start_Z, Double_t Z, Double_t H1, Double_t field, Double_t mgap){
   fDesign = Design;
   fField  = field;
