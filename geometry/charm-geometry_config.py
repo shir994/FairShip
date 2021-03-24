@@ -108,11 +108,11 @@ with ConfigRegistry.register_config("basic") as c:
         c.muShield.half_X_max += 15 * u.cm
         c.muShield.half_Y_max += 15 * u.cm
     elif muShieldDesign == 20:
-        c.muShield.Gap = 20.*u.cm
+        c.muShield.Gap = 0.2.*u.m
         c.muShield.Field = 1.7  # Tesla
-        c.muShield.Start_Z = 300. * u.cm # + zGap
-        c.muShield.Z = 50. * u.cm
-        c.muShield.H1 = 150. * u.cm
+        c.muShield.Start_Z = 3. * u.m # + zGap
+        c.muShield.Z = 0.5. * u.m
+        c.muShield.H1 = 1.5. * u.m
         c.muShield.length =  c.muShield.H1 * 4  + c.muShield.Gap * 3
 
 
@@ -126,8 +126,8 @@ with ConfigRegistry.register_config("basic") as c:
 
 
     c.SensPlane = AttrDict(z=0 * u.cm)
-    c.SensPlane.z_1 = c.Goliath.goliathcentre - c.Goliath.LS / 2 - 1 * u.m
-    c.SensPlane.z_2 = c.Goliath.goliathcentre + c.Goliath.LS / 2 + 1 * u.m
+    c.SensPlane.z_1 = c.Goliath.goliathcentre - c.Goliath.LS / 2 - 10 * u.cm
+    c.SensPlane.z_2 = c.Goliath.goliathcentre + c.Goliath.LS / 2 + 10 * u.cm
 
     c.muShield.z = c.SensPlane.z_2 + 1*u.m + c.muShield.length / 2
     c.SensPlane.z_3 = c.muShield.z + 1*u.m + c.muShield.length / 2

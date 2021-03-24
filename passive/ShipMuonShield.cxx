@@ -24,6 +24,16 @@ Double_t kilogauss = 1.;
 Double_t tesla = 10 * kilogauss;
 
 ShipMuonShield::~ShipMuonShield() {}
+ShipMuonShield::ShipMuonShield(const char* name, const Int_t Design=20,  const char* Title="ShipMuonShield",
+                               Double_t Start_Z=0, Double_t Z=0, Double_t H1=0, Double_t field=1.7, Double_t mgap=0){
+  fDesign = Design;
+  fField  = field;
+  dZ0 = Start_Z;
+  dZ1 = Z;
+  dZ2 = H1; 
+  dZ3 = mgap;
+}
+
 ShipMuonShield::ShipMuonShield() : FairModule("ShipMuonShield", "") {}
 
 ShipMuonShield::ShipMuonShield(Double_t Z, TString geofile,
@@ -538,6 +548,9 @@ Int_t ShipMuonShield::Initialize(std::vector<TString> &magnetName,
 				std::vector<Double_t> &Z) {
 
   const Int_t nMagnets = (fDesign >= 7) ? 9 : 8;
+  if fDesign==20{
+    nMagnets=4;
+  }
   magnetName.reserve(nMagnets);
   fieldDirection.reserve(nMagnets);
   for (auto i :
@@ -787,7 +800,61 @@ Int_t ShipMuonShield::Initialize(std::vector<TString> &magnetName,
     HmainSideMagOut[i] = dYOut[i] / 2;
   }
 
-  } else {
+  } else if (fDesign == 20) {
+    magnetName = {"Magn1", "Magn2", "Magn3", "Magn4"};
+
+     fieldDirection = {
+        FieldDirection::up, FieldDirection::up, FieldDirection::up,
+        FieldDirection::up
+     };
+
+     dXIn[0] = dZ2 * m;
+     dXOut[0] = dXIn[0];
+     dYIn[0] = dXIn[0];
+     dYOut[0] = dXIn[0];
+     gapIn[0] = 10 * cm;
+     gapOut[0] = 10 * cm;
+     dZ[0] = dZ1;
+     Z[0] = dZ0 + dZ[0];
+
+     dXIn[1] = dZ2 * m;
+     dXOut[1] = dZ2 * m;
+     dYIn[1] = dZ2 * m;
+     dYOut[1] = dZ2 * m;
+     gapIn[1] = 10 * cm;
+     gapOut[1] = 10 * cm;
+     dZ[1] = dZ1;
+     Z[1] = Z[0] + dZ[0] + dZ[1] + dZ3;
+
+     dXIn[2] = dZ2 * m;
+     dXOut[2] = dZ2 * m;
+     dYIn[2] = dZ2 * m;
+     dYOut[2] = dZ2 * m;
+     gapIn[2] = 10 * cm;
+     gapOut[2] = 10 * cm;
+     dZ[2] = dZ1;
+     Z[2] = Z[1] + dZ[1] + dZ[2] +  dZ3;
+
+     dXIn[3] = dZ2 * m;
+     dXOut[3] = dZ2 * m;
+     dYIn[3] = dZ2 * m;
+     dYOut[3] = dZ2 * m;
+     gapIn[3] = 10 * cm;
+     gapOut[3] = 10 * cm;
+     dZ[3] = dZ1;
+     Z[3] = Z[2] + dZ[2] + dZ[3] + dZ3;
+
+     for (int i = 0; i < nMagnets; ++i) {
+        midGapIn[i] = 0.;
+        midGapOut[i] = 0.;
+        HmainSideMagIn[i] = dYIn[i] / 2;
+        HmainSideMagOut[i] = dYOut[i] / 2;
+     }
+
+
+  }
+
+    else {
 
   magnetName = {"1", "2", "3", "4", "5", "6", "7"};
 
@@ -882,7 +949,29 @@ void ShipMuonShield::ConstructGeometry()
         top->AddNode(tShield, 1);
         return;
     }
-    
+    if (fDesign==20){
+
+        Double_t ironField = fField*tesla;
+        TGeoUniformMagField *magFieldIron = new TGeoUniformMagField(0.,ironField,0.);
+        TGeoUniformMagField *RetField     = new TGeoUniformMagField(0.,-ironField,0.);
+        TGeoUniformMagField *ConRField    = new TGeoUniformMagField(-ironField,0.,0.);
+        TGeoUniformMagField *ConLField    = new TGeoUniformMagField(ironField,0.,0.);
+        TGeoUniformMagField *fields[4] = {magFieldIron,RetField,ConRField,ConLField};
+        std::vector<FieldDirection> fieldDirection;
+
+        std::vector<TString> magnetName;
+        std::vector<Double_t> dXIn, dYIn, dXOut, dYOut, dZf, midGapIn, midGapOut, HmainSideMagIn, HmainSideMagOut, gapIn, gapOut, Z;
+        const Int_t nParts = Initialize(magnetName, fieldDirection, dXIn, dYIn, dXOut, dYOut, dZf, midGapIn, midGapOut, HmainSideMagIn, HmainSideMagOut, gapIn, gapOut, Z);
+        
+        for (unsigned int i = 0; i<nParts; i++){
+          CreateMagnet(magnetName[i], steel, tShield, fields,fieldDirection[i],
+           dXIn[i],dYIn[i],dXOut[i],dYOut[i],dZf[i],
+           midGapIn[i],midGapOut[i],HmainSideMagIn[i],HmainSideMagOut[i],
+           gapIn[i],gapOut[i],Z[i],0, fStepGeo);
+        }
+        top->AddNode(tShield, 1);
+        return;
+    }
     
     if (fDesign >= 5 && fDesign <= 9) {
       Double_t ironField = fField*tesla;
