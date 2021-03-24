@@ -15,11 +15,12 @@
 
 using namespace std;
 
-Bool_t GeneralGun::Init(string mOption){
+Bool_t GeneralGun::Init(double z_pos){
 
 	rng  = new TRandom3(gRandom->GetSeed());
 	position_pdf = 0;
 	momentum_pdf = 0;
+	z0=z_pos;
 	// fNevents; = 0;
 	return kTRUE;
 }
@@ -74,7 +75,7 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 			py = 0. * GeV;
 			pz = 10. * GeV;
 	}
-	z = -400.;
+	z = z0;
 	TDatabasePDG* pdgBase = TDatabasePDG::Instance();
 	mass = pdgBase->GetParticle(PID)->Mass(); // GeV
 	weight = 1.;

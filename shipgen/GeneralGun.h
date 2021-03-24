@@ -30,7 +30,7 @@ class GeneralGun : public FairGenerator{
 	/** public method ReadEvent **/
 	Bool_t ReadEvent(FairPrimaryGenerator*);  //!
 	//  virtual Bool_t Init(); //!
-	virtual Bool_t Init(string mOption); //!
+	virtual Bool_t Init(double z_pos); //!
 	Int_t GetNevents();
 	
 	double z0, yBox,xBox,zBox,xdist, zdist, minE;

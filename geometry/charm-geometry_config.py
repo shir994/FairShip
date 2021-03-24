@@ -20,6 +20,7 @@ with ConfigRegistry.register_config("basic") as c:
     c.decayVolume            =  AttrDict(z=0*u.cm)
     c.decayVolume.length     =   50*u.m
 
+    c.Beam = AttrDict(z=-200 * u.cm)
 
     c.Goliath = AttrDict(z=0 * u.cm)
     # Spectrometer
@@ -35,6 +36,7 @@ with ConfigRegistry.register_config("basic") as c:
     # c.Spectrometer.BasisH = 57*u.cm
     c.Goliath.BasisH = 50.22125 * u.cm
     c.Goliath.H = 2 * c.Goliath.BasisH + c.Goliath.CoilD + c.Goliath.UpCoilH + c.Goliath.LowCoilH
+
     # c.Spectrometer.DX = 2. * u.m
     # c.Spectrometer.DY = 1.6 * u.m
     # c.Spectrometer.DZ = 16. * u.cm
@@ -43,7 +45,7 @@ with ConfigRegistry.register_config("basic") as c:
     c.Goliath.goliathcentre_to_beam = 17.32*u.cm + (c.Goliath.UpCoilH-c.Goliath.LowCoilH)/2.
     c.Goliath.goliathcentre = 0*u.cm #351.19*u.cm
 
-
+    
     # c.MufluxSpectrometer.DX = 2.*u.m
     # c.MufluxSpectrometer.DY = 1.6*u.m
     # c.MufluxSpectrometer.DZ = 11.72*u.cm

@@ -57,8 +57,13 @@ parser.add_argument("--optParams", dest='optParams', required=False, default=Fal
 parser.add_argument("--processMiniShield", dest='processMiniShield', action="store_true", required=False)
 parser.add_argument("--zoneSize", dest='zone', required=False, default=0, type=int)
 parser.add_argument("--energyScaleFactor", dest='energyScaleFactor', default=1, required=False, type=float)
+parser.add_argument("--GPG",      dest="gpg",      help="Use General Particle Gun", required=False, action="store_true")
+parser.add_argument("--MuonBack",dest="muonback",  help="Generate events from muon background file, --Cosmics=0 for cosmic generator data", required=False, action="store_true")
 
 options = parser.parse_args()
+if options.gpg:  simEngine = "GPG"
+if options.muonback: simEngine = "MuonBack"
+else: simEngine="MuonBack"
 
 if options.muShieldWithCobaltMagnet and options.ds < 3:
     print("--coMuonShield works only for muShieldDesign >2")
@@ -90,25 +95,31 @@ run.SetOutputFile(outFile)  # Output file
 run.SetUserConfig('g4Config.C')
 modules = shipDet_conf.configure(run, ship_geo)
 primGen = r.FairPrimaryGenerator()
+if simEngine=="MuonBack":
+    fileType = ut.checkFileExists(options.inputFile)
+# if fileType == 'tree':
+#     # 2018 background production
+#     primGen.SetTarget(ship_geo.target.z0 + 70.845 * u.m, 0.)
+# else:
+#     #primGen.SetTarget(ship_geo.target.z0 + 50 * u.m, 0.)
+#     primGen.SetTarget(0 + 50 * u.m, 0.)
 
-fileType = ut.checkFileExists(options.inputFile)
-if fileType == 'tree':
-    # 2018 background production
-    primGen.SetTarget(ship_geo.target.z0 + 70.845 * u.m, 0.)
-else:
-    #primGen.SetTarget(ship_geo.target.z0 + 50 * u.m, 0.)
-    primGen.SetTarget(0 + 50 * u.m, 0.)
+    MuonBackgen = r.MuonBackGenerator()
+    MuonBackgen.Init(options.inputFile, options.firstEvent, options.energyScaleFactor, options.phiRandom)
+    if options.sameSeed:
+        MuonBackgen.SetSameSeed(options.sameSeed)
+    primGen.AddGenerator(MuonBackgen)
+    if not options.nEvents:
+        n_events = MuonBackgen.GetNevents()
+    else:
+        n_events = min(options.nEvents, MuonBackgen.GetNevents())
+    print('Process ', options.nEvents, ' from input file, with Phi random=', options.phiRandom)
 
-MuonBackgen = r.MuonBackGenerator()
-MuonBackgen.Init(options.inputFile, options.firstEvent, options.energyScaleFactor, options.phiRandom)
-if options.sameSeed:
-    MuonBackgen.SetSameSeed(options.sameSeed)
-primGen.AddGenerator(MuonBackgen)
-if not options.nEvents:
-    n_events = MuonBackgen.GetNevents()
-else:
-    n_events = min(options.nEvents, MuonBackgen.GetNevents())
-print('Process ', options.nEvents, ' from input file, with Phi random=', options.phiRandom)
+if simEngine == "GPG": 
+  myPgun = ROOT.GeneralGun()
+  myPgun.Init(ship_geo.Beam.z)
+  primGen.AddGenerator(myPgun)
+
 if options.followMuon:
     options.fastMuon = True
     modules['Veto'].SetFollowMuon()
