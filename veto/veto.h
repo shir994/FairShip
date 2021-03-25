@@ -7,9 +7,7 @@
 #include "TGeoVolume.h"
 
 #include <map>
-#include <boost/python/module.hpp>
-#include <boost/python/class.hpp>
-#include <boost/python/scope.hpp>
+#include<cstdarg>
 
 class vetoPoint;
 class FairVolume;
@@ -98,8 +96,13 @@ class veto: public FairDetector
     inline void SetLiquidVeto(Int_t liquid=1) {fLiquidVeto=liquid;}
     inline Int_t GetLiquidVeto() const {return fLiquidVeto;}
 
-    inline void SetSensePlaneZ(std::vector<double> zPlane) {
-        sens_z = extract<std::vector<double>>(zPlane);
+    inline void SetSensePlaneZ(int nPlanes, ...) {
+        std::va_list args;
+        va_start(args, nPlanes);
+        for (int i = 0; i < nPlanes, ++i){
+            sens_z.push_back(va_arg(args, double));
+        }
+        va_end(args);
     }
 
   private:
