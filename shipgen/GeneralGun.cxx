@@ -81,7 +81,7 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 	weight = 1.;
 
 	P = TMath::Sqrt(px*px + py*py + pz*pz);
-	cout<<px<<"	"<<py<<"	"<<pz<<"	"<<x<<"	"<<y<<"	"<<z<<"	"<<endl;
+	// cout<<px<<"	"<<py<<"	"<<pz<<"	"<<x<<"	"<<y<<"	"<<z<<"	"<<endl;
 	cpg->AddTrack(PID, px,py,pz, x,y,z, -1, true, TMath::Sqrt(P*P+mass*mass), 0, weight);  // -1 = Mother ID, true = tracking, SQRT(x) = Energy, 0 = t
 	fNevents++;
 	return kTRUE;
