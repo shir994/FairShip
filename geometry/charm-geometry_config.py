@@ -20,7 +20,7 @@ with ConfigRegistry.register_config("basic") as c:
     c.decayVolume            =  AttrDict(z=0*u.cm)
     c.decayVolume.length     =   50*u.m
 
-    c.Beam = AttrDict(z=-200 * u.cm)
+    c.Beam = AttrDict(z=-230 * u.cm)
 
     c.Goliath = AttrDict(z=0 * u.cm)
     # Spectrometer
