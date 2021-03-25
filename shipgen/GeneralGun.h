@@ -30,7 +30,7 @@ class GeneralGun : public FairGenerator{
 	/** public method ReadEvent **/
 	Bool_t ReadEvent(FairPrimaryGenerator*);  //!
 	//  virtual Bool_t Init(); //!
-	virtual Bool_t Init(double z_pos); //!
+	virtual Bool_t Init(double z_pos, double energy); //!
 	Int_t GetNevents();
 	
 	double z0, yBox,xBox,zBox,xdist, zdist, minE;
@@ -43,7 +43,7 @@ class GeneralGun : public FairGenerator{
 
  	int position_pdf;
  	int momentum_pdf;
-	double P,px,py,pz,x,y,z,weighttest, weight, mass, theta;
+	double energy,P,px,py,pz,x,y,z,weighttest, weight, mass, theta;
 	int PID;//!
 	
 

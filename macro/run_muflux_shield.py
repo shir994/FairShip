@@ -117,7 +117,7 @@ if simEngine=="MuonBack":
 
 if simEngine == "GPG": 
   myPgun = r.GeneralGun()
-  myPgun.Init(ship_geo.Beam.z)
+  myPgun.Init(ship_geo.Beam.z, 10) #(z position, beam energy)
   primGen.AddGenerator(myPgun)
   n_events = options.nEvents
 
