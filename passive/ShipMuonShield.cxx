@@ -824,7 +824,7 @@ Int_t ShipMuonShield::Initialize(std::vector<TString> &magnetName,
      gapIn[1] = 10 * cm;
      gapOut[1] = 10 * cm;
      dZ[1] = dZ1;
-     Z[1] = Z[0] + dZ[0] + dZ[1] + dZ3;
+     Z[1] = Z[0] + dZ[0] + dZ[1] + 2.*dZ3;
 
      dXIn[2] = dZ2/rect;
      dXOut[2] = dXIn[2];
@@ -833,7 +833,7 @@ Int_t ShipMuonShield::Initialize(std::vector<TString> &magnetName,
      gapIn[2] = 10 * cm;
      gapOut[2] = 10 * cm;
      dZ[2] = dZ1;
-     Z[2] = Z[1] + dZ[1] + dZ[2] +  dZ3;
+     Z[2] = Z[1] + dZ[1] + dZ[2] +  2.*dZ3;
 
      dXIn[3] = dZ2/rect;
      dXOut[3] = dXIn[3];
@@ -842,7 +842,7 @@ Int_t ShipMuonShield::Initialize(std::vector<TString> &magnetName,
      gapIn[3] = 10 * cm;
      gapOut[3] = 10 * cm;
      dZ[3] = dZ1;
-     Z[3] = Z[2] + dZ[2] + dZ[3] + dZ3;
+     Z[3] = Z[2] + dZ[2] + dZ[3] + 2.*dZ3;
 
      for (int i = 0; i < nMagnets; ++i) {
         midGapIn[i] = 0.;
