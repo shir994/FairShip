@@ -100,7 +100,7 @@ class veto: public FairDetector
         sens_z_2 = _sens_z_2;
         sens_z_3 = _sens_z_3;
     }
-    inline void SetSensePlaneZ(Float_t _sens_z_1, Float_t _sens_z_2, Float_t _sens_z_3, Float_t _sens_z_4, Float_t _sens_z_5, Float_t _sens_z_6, Float_t _sens_z_7) {
+    inline void SetSensePlaneZ(Float_t _sens_z_1, Float_t _sens_z_2, Float_t _sens_z_3, Float_t _sens_z_4, Float_t _sens_z_5, Float_t _sens_z_6, Float_t _sens_z_7, Float_t _sens_z_8) {
         sens_z_1 = _sens_z_1;
         sens_z_2 = _sens_z_2;
         sens_z_3 = _sens_z_3;
@@ -108,6 +108,7 @@ class veto: public FairDetector
         sens_z_5 = _sens_z_5;
         sens_z_6 = _sens_z_6;
         sens_z_7 = _sens_z_7;
+        sens_z_8 = _sens_z_8;
     }
 
   private:
@@ -170,7 +171,7 @@ class veto: public FairDetector
     /** container for data points */
     TClonesArray*  fvetoPointCollection;
 
-    Float_t sens_z_1, sens_z_2, sens_z_3, sens_z_4, sens_z_5, sens_z_6, sens_z_7 = 0.;
+    Float_t sens_z_1, sens_z_2, sens_z_3, sens_z_4, sens_z_5, sens_z_6, sens_z_7,  sens_z_8 = 0.;
 
     veto(const veto&);
     veto& operator=(const veto&);
