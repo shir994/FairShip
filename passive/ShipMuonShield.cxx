@@ -808,37 +808,37 @@ Int_t ShipMuonShield::Initialize(std::vector<TString> &magnetName,
         FieldDirection::up
      };
 
-     dXIn[0] = dZ2;
+     dXIn[0] = dZ2/4.;
      dXOut[0] = dXIn[0];
-     dYIn[0] = dXIn[0];
-     dYOut[0] = dXIn[0];
+     dYIn[0] = dZ2;
+     dYOut[0] = dYIn[0];
      gapIn[0] = 10 * cm;
      gapOut[0] = 10 * cm;
      dZ[0] = dZ1;
      Z[0] = dZ0 + dZ[0];
 
-     dXIn[1] = dZ2;
-     dXOut[1] = dZ2;
+     dXIn[1] = dZ2/4.;
+     dXOut[1] = dXIn[1];
      dYIn[1] = dZ2;
-     dYOut[1] = dZ2 * m;
+     dYOut[1] = dYIn[1];
      gapIn[1] = 10 * cm;
      gapOut[1] = 10 * cm;
      dZ[1] = dZ1;
      Z[1] = Z[0] + dZ[0] + dZ[1] + dZ3;
 
-     dXIn[2] = dZ2;
-     dXOut[2] = dZ2;
+     dXIn[2] = dZ2/4.;
+     dXOut[2] = dXIn[2];
      dYIn[2] = dZ2;
-     dYOut[2] = dZ2;
+     dYOut[2] = dYIn[2];
      gapIn[2] = 10 * cm;
      gapOut[2] = 10 * cm;
      dZ[2] = dZ1;
      Z[2] = Z[1] + dZ[1] + dZ[2] +  dZ3;
 
-     dXIn[3] = dZ2;
-     dXOut[3] = dZ2;
+     dXIn[3] = dZ2/4.;
+     dXOut[3] = dXIn[3];
      dYIn[3] = dZ2;
-     dYOut[3] = dZ2;
+     dYOut[3] = dYIn[3];
      gapIn[3] = 10 * cm;
      gapOut[3] = 10 * cm;
      dZ[3] = dZ1;
