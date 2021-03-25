@@ -807,8 +807,8 @@ Int_t ShipMuonShield::Initialize(std::vector<TString> &magnetName,
         FieldDirection::up, FieldDirection::up, FieldDirection::up,
         FieldDirection::up
      };
-
-     dXIn[0] = dZ2/4.;
+     Double_t rect = 2.;
+     dXIn[0] = dZ2/rect;
      dXOut[0] = dXIn[0];
      dYIn[0] = dZ2;
      dYOut[0] = dYIn[0];
@@ -817,7 +817,7 @@ Int_t ShipMuonShield::Initialize(std::vector<TString> &magnetName,
      dZ[0] = dZ1;
      Z[0] = dZ0 + dZ[0];
 
-     dXIn[1] = dZ2/4.;
+     dXIn[1] = dZ2/rect;
      dXOut[1] = dXIn[1];
      dYIn[1] = dZ2;
      dYOut[1] = dYIn[1];
@@ -826,7 +826,7 @@ Int_t ShipMuonShield::Initialize(std::vector<TString> &magnetName,
      dZ[1] = dZ1;
      Z[1] = Z[0] + dZ[0] + dZ[1] + dZ3;
 
-     dXIn[2] = dZ2/4.;
+     dXIn[2] = dZ2/rect;
      dXOut[2] = dXIn[2];
      dYIn[2] = dZ2;
      dYOut[2] = dYIn[2];
@@ -835,7 +835,7 @@ Int_t ShipMuonShield::Initialize(std::vector<TString> &magnetName,
      dZ[2] = dZ1;
      Z[2] = Z[1] + dZ[1] + dZ[2] +  dZ3;
 
-     dXIn[3] = dZ2/4.;
+     dXIn[3] = dZ2/rect;
      dXOut[3] = dXIn[3];
      dYIn[3] = dZ2;
      dYOut[3] = dYIn[3];
