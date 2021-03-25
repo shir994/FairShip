@@ -12,7 +12,6 @@
 class vetoPoint;
 class FairVolume;
 class TClonesArray;
-using namespace boost::python;
 
 class veto: public FairDetector
 {
@@ -96,13 +95,19 @@ class veto: public FairDetector
     inline void SetLiquidVeto(Int_t liquid=1) {fLiquidVeto=liquid;}
     inline Int_t GetLiquidVeto() const {return fLiquidVeto;}
 
-    inline void SetSensePlaneZ(int nPlanes, ...) {
-        std::va_list args;
-        va_start(args, nPlanes);
-        for (int i = 0; i < nPlanes, ++i){
-            sens_z.push_back(va_arg(args, double));
-        }
-        va_end(args);
+    inline void SetSensePlaneZ(Float_t _sens_z_1, Float_t _sens_z_2, Float_t _sens_z_3) {
+        sens_z_1 = _sens_z_1;
+        sens_z_2 = _sens_z_2;
+        sens_z_3 = _sens_z_3;
+    }
+    inline void SetSensePlaneZ(Float_t _sens_z_1, Float_t _sens_z_2, Float_t _sens_z_3, Float_t _sens_z_4, Float_t _sens_z_5, Float_t _sens_z_6, Float_t _sens_z_7) {
+        sens_z_1 = _sens_z_1;
+        sens_z_2 = _sens_z_2;
+        sens_z_3 = _sens_z_3;
+        sens_z_4 = _sens_z_4;
+        sens_z_5 = _sens_z_5;
+        sens_z_6 = _sens_z_6;
+        sens_z_7 = _sens_z_7;
     }
 
   private:
@@ -165,7 +170,7 @@ class veto: public FairDetector
     /** container for data points */
     TClonesArray*  fvetoPointCollection;
 
-    std::vector<double> sens_z;
+    Float_t sens_z_1, sens_z_2, sens_z_3, sens_z_4, sens_z_5, sens_z_6, sens_z_7 = 0.;
 
     veto(const veto&);
     veto& operator=(const veto&);

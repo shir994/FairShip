@@ -1243,10 +1243,19 @@ void veto::ConstructGeometry()
 //     InitMedium("vacuum");
 //     TGeoMedium* dummy = gGeoManager->GetMedium("vacuum");
 
-    for (unsigned int i=0; i < sens_z.size(); i++){
+    // for (unsigned int i=0; i < sens_z.size(); i++){
+    //    TGeoVolume* goliath_sens = gGeoManager->MakeBox(("sensitive_plane_"+std::to_string(i)).c_str(), Sens, 1*m, 1*m, 1*cm);
+    //    goliath_sens->SetLineColor(kBlue);
+    //    top->AddNode(goliath_sens, 0, new TGeoTranslation(0, 0, sens_z.at(i)));
+    //    AddSensitiveVolume(goliath_sens);
+    // }
+
+     int nPlanes = (sens_z_7>0)?7:3;
+     std::vector<double>zPlanes {sens_z_1, sens_z_2, sens_z_3, sens_z_4, sens_z_5, sens_z_6, sens_z_7}
+     for (unsigned int i=0; i < nPlanes; i++){
        TGeoVolume* goliath_sens = gGeoManager->MakeBox(("sensitive_plane_"+std::to_string(i)).c_str(), Sens, 1*m, 1*m, 1*cm);
        goliath_sens->SetLineColor(kBlue);
-       top->AddNode(goliath_sens, 0, new TGeoTranslation(0, 0, sens_z.at(i)));
+       top->AddNode(goliath_sens, 0, new TGeoTranslation(0, 0, zPlanes.at(i)));
        AddSensitiveVolume(goliath_sens);
     }
      // TGeoVolume* goliath_sens = gGeoManager->MakeBox("sensitive_plane", Sens, 1*m, 1*m, 1*cm);
@@ -1259,6 +1268,7 @@ void veto::ConstructGeometry()
      // after_shield->SetLineColor(kRed);
      // top->AddNode(after_shield, 0, new TGeoTranslation(0, 0, sens_z_3));
      // AddSensitiveVolume(after_shield);
+     // if 
 
 // only for fastMuon simulation, otherwise output becomes too big
      if (fFastMuon && fFollowMuon){
