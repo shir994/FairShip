@@ -18,8 +18,8 @@ using namespace std;
 Bool_t GeneralGun::Init(double z_pos, double lenergy){
 
 	rng  = new TRandom3(gRandom->GetSeed());
-	position_pdf = 0;
-	momentum_pdf = 0;
+	position_pdf = 1;
+	momentum_pdf = 1;
 	z0=z_pos;
 	energy = lenergy;
 	// fNevents; = 0;
