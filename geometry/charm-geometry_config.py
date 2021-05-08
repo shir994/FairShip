@@ -113,7 +113,7 @@ with ConfigRegistry.register_config("basic") as c:
         c.muShield.Start_Z = 3. * u.m # + zGap
         c.muShield.Z = 0.25 * u.m
         c.muShield.H1 = 1.5 * u.m
-        c.muShield.length =  2*(c.muShield.H1 * 4  + c.muShield.Gap * 3)
+        c.muShield.length =  2*(c.muShield.Z * 4  + c.muShield.Gap * 3)
 
 
     if muShieldDesign in range(7, 10):

@@ -59,6 +59,7 @@ parser.add_argument("--zoneSize", dest='zone', required=False, default=0, type=i
 parser.add_argument("--energyScaleFactor", dest='energyScaleFactor', default=1, required=False, type=float)
 parser.add_argument("--GPG",      dest="gpg",      help="Use General Particle Gun", required=False, action="store_true")
 parser.add_argument("--MuonBack",dest="muonback",  help="Generate events from muon background file, --Cosmics=0 for cosmic generator data", required=False, action="store_true")
+parser.add_argument("--shieldField", dest="muField", help="Field value for muon shield", required=False, default=1.7, type=float)
 
 options = parser.parse_args()
 if options.gpg:  simEngine = "GPG"
@@ -81,6 +82,7 @@ ship_geo = ConfigRegistry.loadpy("$FAIRSHIP/geometry/charm-geometry_config.py",
                                  muShieldStepGeo=options.muShieldStepGeo,
                                  muShieldWithCobaltMagnet=options.muShieldWithCobaltMagnet)
 ship_geo.optParams = options.optParams
+ship_geo.muShield.Field = options.muField
 
 if not os.path.exists(options.outputDir):
     os.makedirs(options.outputDir)
