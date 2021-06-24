@@ -18,8 +18,8 @@ using namespace std;
 Bool_t GeneralGun::Init(double z_pos, double lenergy){
 
 	rng  = new TRandom3(gRandom->GetSeed());
-	position_pdf = 1;
-	momentum_pdf = 1;
+	position_pdf = 3;
+	momentum_pdf = 0;
 	z0=z_pos;
 	energy = lenergy;
 	// fNevents; = 0;
@@ -67,7 +67,11 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 					cout<<"Check your config, too many resamples";
 					sample_count = 0;
 				}
+		case 3:
+				x = 0;
+				y = 0;
 			}
+		
 	}
 	//Energy
 	switch (momentum_pdf){
