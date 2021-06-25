@@ -44,6 +44,8 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 	int sample_count = 0;
 	bool success_flag = false;
 	// pdf_name = GAUS;
+	position_pdf = 3;
+	momentum_pdf = 0;
 	switch(position_pdf){
 		case 0:
 			x = rng->Gaus(0, sigma);//G4INCL::Random::gauss(sigma);
