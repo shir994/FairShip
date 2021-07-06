@@ -79,12 +79,12 @@ Bool_t GeneralGun::ReadEvent(FairPrimaryGenerator* cpg){
 	//Energy
 // 	switch (momentum_pdf){
 // 		case 0:
-			px = 0. * GeV;
-			py = 0. * GeV;
+// 			px = 0. * GeV;
+// 			py = 0. * GeV;
 // 			pz = 30*GeV;//energy * GeV;
 // 		case 1:
-// 			px = rng->Uniform(-1.5 * GeV, 1.5 * GeV);
-// 			py = rng->Uniform(-1.5 * GeV, 1.5 * GeV);
+			px = rng->Uniform(-1.0 * GeV, 1.0 * GeV);
+			py = rng->Uniform(-1.0 * GeV, 1.0 * GeV);
 			pz = rng->Uniform(28.* GeV, 32. * GeV);
 // 	}
 	z = z0;
