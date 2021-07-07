@@ -57,8 +57,14 @@ parser.add_argument("--optParams", dest='optParams', required=False, default=Fal
 parser.add_argument("--processMiniShield", dest='processMiniShield', action="store_true", required=False)
 parser.add_argument("--zoneSize", dest='zone', required=False, default=0, type=int)
 parser.add_argument("--energyScaleFactor", dest='energyScaleFactor', default=1, required=False, type=float)
+parser.add_argument("--GPG",      dest="gpg",      help="Use General Particle Gun", required=False, action="store_true")
+parser.add_argument("--MuonBack",dest="muonback",  help="Generate events from muon background file, --Cosmics=0 for cosmic generator data", required=False, action="store_true")
+parser.add_argument("--shieldField", dest="muField", help="Field value for muon shield", required=False, default=1.7, type=float)
 
 options = parser.parse_args()
+if options.gpg:  simEngine = "GPG"
+elif options.muonback: simEngine = "MuonBack"
+else: simEngine="MuonBack"
 
 if options.muShieldWithCobaltMagnet and options.ds < 3:
     print("--coMuonShield works only for muShieldDesign >2")
@@ -76,6 +82,7 @@ ship_geo = ConfigRegistry.loadpy("$FAIRSHIP/geometry/charm-geometry_config.py",
                                  muShieldStepGeo=options.muShieldStepGeo,
                                  muShieldWithCobaltMagnet=options.muShieldWithCobaltMagnet)
 ship_geo.optParams = options.optParams
+ship_geo.muShield.Field = options.muField
 
 if not os.path.exists(options.outputDir):
     os.makedirs(options.outputDir)
@@ -90,25 +97,32 @@ run.SetOutputFile(outFile)  # Output file
 run.SetUserConfig('g4Config.C')
 modules = shipDet_conf.configure(run, ship_geo)
 primGen = r.FairPrimaryGenerator()
+if simEngine=="MuonBack":
+    fileType = ut.checkFileExists(options.inputFile)
+# if fileType == 'tree':
+#     # 2018 background production
+#     primGen.SetTarget(ship_geo.target.z0 + 70.845 * u.m, 0.)
+# else:
+#     #primGen.SetTarget(ship_geo.target.z0 + 50 * u.m, 0.)
+#     primGen.SetTarget(0 + 50 * u.m, 0.)
 
-fileType = ut.checkFileExists(options.inputFile)
-if fileType == 'tree':
-    # 2018 background production
-    primGen.SetTarget(ship_geo.target.z0 + 70.845 * u.m, 0.)
-else:
-    #primGen.SetTarget(ship_geo.target.z0 + 50 * u.m, 0.)
-    primGen.SetTarget(0 + 50 * u.m, 0.)
+    MuonBackgen = r.MuonBackGenerator()
+    MuonBackgen.Init(options.inputFile, options.firstEvent, options.energyScaleFactor, options.phiRandom)
+    if options.sameSeed:
+        MuonBackgen.SetSameSeed(options.sameSeed)
+    primGen.AddGenerator(MuonBackgen)
+    if not options.nEvents:
+        n_events = MuonBackgen.GetNevents()
+    else:
+        n_events = min(options.nEvents, MuonBackgen.GetNevents())
+    print('Process ', options.nEvents, ' from input file, with Phi random=', options.phiRandom)
 
-MuonBackgen = r.MuonBackGenerator()
-MuonBackgen.Init(options.inputFile, options.firstEvent, options.energyScaleFactor, options.phiRandom)
-if options.sameSeed:
-    MuonBackgen.SetSameSeed(options.sameSeed)
-primGen.AddGenerator(MuonBackgen)
-if not options.nEvents:
-    n_events = MuonBackgen.GetNevents()
-else:
-    n_events = min(options.nEvents, MuonBackgen.GetNevents())
-print('Process ', options.nEvents, ' from input file, with Phi random=', options.phiRandom)
+if simEngine == "GPG": 
+  myPgun = r.GeneralGun()
+  myPgun.Init(ship_geo.Beam.z, 10) #(z position, beam energy)
+  primGen.AddGenerator(myPgun)
+  n_events = options.nEvents
+
 if options.followMuon:
     options.fastMuon = True
     modules['Veto'].SetFollowMuon()
@@ -127,9 +141,9 @@ print('Initialised run.')
 
 fieldMaker = geomGeant4.addVMCFields(ship_geo, '', True)
 
-fieldMaker.plotField(1, r.TVector3(-300.0, 600.0, 10.0), r.TVector3(-300.0, 300.0, 6.0),
+fieldMaker.plotField(1, r.TVector3(-300.0, 1600.0, 10.0), r.TVector3(-300.0, 300.0, 6.0),
                      os.path.join(options.outputDir, 'Bzx.png'))
-fieldMaker.plotField(2, r.TVector3(-300.0, 600.0, 10.0), r.TVector3(-400.0, 400.0, 6.0),
+fieldMaker.plotField(2, r.TVector3(-300.0, 1600.0, 10.0), r.TVector3(-400.0, 400.0, 6.0),
                      os.path.join(options.outputDir, 'Bzy.png'))
 print('Start run of {} events.'.format(n_events))
 run.Run(n_events)

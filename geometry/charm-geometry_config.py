@@ -11,7 +11,7 @@ with ConfigRegistry.register_config("basic") as c:
     if "muShieldWithCobaltMagnet" not in globals():
         muShieldWithCobaltMagnet = 0
     if "muShieldDesign" not in globals():
-        muShieldDesign = 9
+        muShieldDesign = 20
     if "muShieldGeo" not in globals():
         muShieldGeo = None
 
@@ -20,6 +20,7 @@ with ConfigRegistry.register_config("basic") as c:
     c.decayVolume            =  AttrDict(z=0*u.cm)
     c.decayVolume.length     =   50*u.m
 
+    c.Beam = AttrDict(z=-250 * u.cm)
 
     c.Goliath = AttrDict(z=0 * u.cm)
     # Spectrometer
@@ -35,6 +36,7 @@ with ConfigRegistry.register_config("basic") as c:
     # c.Spectrometer.BasisH = 57*u.cm
     c.Goliath.BasisH = 50.22125 * u.cm
     c.Goliath.H = 2 * c.Goliath.BasisH + c.Goliath.CoilD + c.Goliath.UpCoilH + c.Goliath.LowCoilH
+
     # c.Spectrometer.DX = 2. * u.m
     # c.Spectrometer.DY = 1.6 * u.m
     # c.Spectrometer.DZ = 16. * u.cm
@@ -105,6 +107,14 @@ with ConfigRegistry.register_config("basic") as c:
             c.muShield.half_Y_max = max(c.muShield.half_Y_max, h_l + f_l, h_r + f_r)
         c.muShield.half_X_max += 15 * u.cm
         c.muShield.half_Y_max += 15 * u.cm
+    elif muShieldDesign == 20:
+        c.muShield.Gap = 0.05*u.m
+        c.muShield.Field = 1.7  # Tesla
+        c.muShield.Start_Z = 3. * u.m # + zGap
+        c.muShield.Z = 0.25 * u.m
+        c.muShield.H1 = 1.5 * u.m
+        c.muShield.length =  2*(c.muShield.Z * 4  + c.muShield.Gap * 3)
+
 
     if muShieldDesign in range(7, 10):
         c.muShield.length = 2 * (
@@ -116,8 +126,8 @@ with ConfigRegistry.register_config("basic") as c:
 
 
     c.SensPlane = AttrDict(z=0 * u.cm)
-    c.SensPlane.z_1 = c.Goliath.goliathcentre - c.Goliath.LS / 2 - 1 * u.m
-    c.SensPlane.z_2 = c.Goliath.goliathcentre + c.Goliath.LS / 2 + 1 * u.m
+    c.SensPlane.z_1 = c.Goliath.goliathcentre - c.Goliath.LS / 2 - 10 * u.cm
+    c.SensPlane.z_2 = c.Goliath.goliathcentre + c.Goliath.LS / 2 + 10 * u.cm
 
     c.muShield.z = c.SensPlane.z_2 + 1*u.m + c.muShield.length / 2
     c.SensPlane.z_3 = c.muShield.z + 1*u.m + c.muShield.length / 2

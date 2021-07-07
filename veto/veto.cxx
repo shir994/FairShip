@@ -1243,16 +1243,32 @@ void veto::ConstructGeometry()
 //     InitMedium("vacuum");
 //     TGeoMedium* dummy = gGeoManager->GetMedium("vacuum");
 
-     TGeoVolume* goliath_sens = gGeoManager->MakeBox("sensitive_plane", Sens, 1*m, 1*m, 1*cm);
-     goliath_sens->SetLineColor(kBlue);
-     top->AddNode(goliath_sens, 0, new TGeoTranslation(0, 0, sens_z_1));
-     top->AddNode(goliath_sens, 1, new TGeoTranslation(0, 0, sens_z_2));
-     AddSensitiveVolume(goliath_sens);
+    // for (unsigned int i=0; i < sens_z.size(); i++){
+    //    TGeoVolume* goliath_sens = gGeoManager->MakeBox(("sensitive_plane_"+std::to_string(i)).c_str(), Sens, 1*m, 1*m, 1*cm);
+    //    goliath_sens->SetLineColor(kBlue);
+    //    top->AddNode(goliath_sens, 0, new TGeoTranslation(0, 0, sens_z.at(i)));
+    //    AddSensitiveVolume(goliath_sens);
+    // }
 
-     TGeoVolume* after_shield = gGeoManager->MakeBox("sensitive_plane_magnet", Sens, 1*m, 1*m, 1*cm);
-     after_shield->SetLineColor(kRed);
-     top->AddNode(after_shield, 0, new TGeoTranslation(0, 0, sens_z_3));
-     AddSensitiveVolume(after_shield);
+     int nPlanes = (sens_z_7>0)?8:3;
+     std::vector<double>zPlanes {sens_z_1, sens_z_2, sens_z_3, sens_z_4, sens_z_5, sens_z_6, sens_z_7,  sens_z_8};
+     for (unsigned int i=0; i < nPlanes; i++){
+       TGeoVolume* goliath_sens = gGeoManager->MakeBox(("sensitive_plane_"+std::to_string(i)).c_str(), Sens, 1*m, 1*m, 1*cm);
+       goliath_sens->SetLineColor(kBlue);
+       top->AddNode(goliath_sens, 0, new TGeoTranslation(0, 0, zPlanes.at(i)));
+       AddSensitiveVolume(goliath_sens);
+    }
+     // TGeoVolume* goliath_sens = gGeoManager->MakeBox("sensitive_plane", Sens, 1*m, 1*m, 1*cm);
+     // goliath_sens->SetLineColor(kBlue);
+     // top->AddNode(goliath_sens, 0, new TGeoTranslation(0, 0, sens_z_1));
+     // top->AddNode(goliath_sens, 1, new TGeoTranslation(0, 0, sens_z_2));
+     // AddSensitiveVolume(goliath_sens);
+
+     // TGeoVolume* after_shield = gGeoManager->MakeBox("sensitive_plane_magnet", Sens, 1*m, 1*m, 1*cm);
+     // after_shield->SetLineColor(kRed);
+     // top->AddNode(after_shield, 0, new TGeoTranslation(0, 0, sens_z_3));
+     // AddSensitiveVolume(after_shield);
+     // if 
 
 // only for fastMuon simulation, otherwise output becomes too big
      if (fFastMuon && fFollowMuon){
